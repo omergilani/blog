@@ -4,36 +4,36 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="twitter:card" content="summary" /><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Activation function options for a neuron | My blog</title>
+<title>Activation function options for a single neuron | My blog</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Activation function options for a neuron" />
+<meta property="og:title" content="Activation function options for a single neuron" />
 <meta name="author" content="Omer" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="In this post I am attempting to summarize the options available to modify the output of any given neuron." />
-<meta property="og:description" content="In this post I am attempting to summarize the options available to modify the output of any given neuron." />
+<meta name="description" content="Coding of activation functions commonly used in deep learning to regulate the output of basic procesing unit (neuron)." />
+<meta property="og:description" content="Coding of activation functions commonly used in deep learning to regulate the output of basic procesing unit (neuron)." />
 <link rel="canonical" href="https://dr-omer.github.io/blog/deeplearning/python/2020/07/25/activatation-function-neuron.html" />
 <meta property="og:url" content="https://dr-omer.github.io/blog/deeplearning/python/2020/07/25/activatation-function-neuron.html" />
 <meta property="og:site_name" content="My blog" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-07-25T00:00:00-05:00" />
 <script type="application/ld+json">
-{"author":{"@type":"Person","name":"Omer"},"description":"In this post I am attempting to summarize the options available to modify the output of any given neuron.","@type":"BlogPosting","headline":"Activation function options for a neuron","dateModified":"2020-07-25T00:00:00-05:00","datePublished":"2020-07-25T00:00:00-05:00","url":"https://dr-omer.github.io/blog/deeplearning/python/2020/07/25/activatation-function-neuron.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://dr-omer.github.io/blog/deeplearning/python/2020/07/25/activatation-function-neuron.html"},"@context":"https://schema.org"}</script>
+{"author":{"@type":"Person","name":"Omer"},"description":"Coding of activation functions commonly used in deep learning to regulate the output of basic procesing unit (neuron).","@type":"BlogPosting","headline":"Activation function options for a single neuron","dateModified":"2020-07-25T00:00:00-05:00","datePublished":"2020-07-25T00:00:00-05:00","url":"https://dr-omer.github.io/blog/deeplearning/python/2020/07/25/activatation-function-neuron.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://dr-omer.github.io/blog/deeplearning/python/2020/07/25/activatation-function-neuron.html"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://dr-omer.github.io/blog/feed.xml" title="My blog" /><link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Activation function options for a neuron | My blog</title>
+<title>Activation function options for a single neuron | My blog</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Activation function options for a neuron" />
+<meta property="og:title" content="Activation function options for a single neuron" />
 <meta name="author" content="Omer" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="In this post I am attempting to summarize the options available to modify the output of any given neuron." />
-<meta property="og:description" content="In this post I am attempting to summarize the options available to modify the output of any given neuron." />
+<meta name="description" content="Coding of activation functions commonly used in deep learning to regulate the output of basic procesing unit (neuron)." />
+<meta property="og:description" content="Coding of activation functions commonly used in deep learning to regulate the output of basic procesing unit (neuron)." />
 <link rel="canonical" href="https://dr-omer.github.io/blog/deeplearning/python/2020/07/25/activatation-function-neuron.html" />
 <meta property="og:url" content="https://dr-omer.github.io/blog/deeplearning/python/2020/07/25/activatation-function-neuron.html" />
 <meta property="og:site_name" content="My blog" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-07-25T00:00:00-05:00" />
 <script type="application/ld+json">
-{"author":{"@type":"Person","name":"Omer"},"description":"In this post I am attempting to summarize the options available to modify the output of any given neuron.","@type":"BlogPosting","headline":"Activation function options for a neuron","dateModified":"2020-07-25T00:00:00-05:00","datePublished":"2020-07-25T00:00:00-05:00","url":"https://dr-omer.github.io/blog/deeplearning/python/2020/07/25/activatation-function-neuron.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://dr-omer.github.io/blog/deeplearning/python/2020/07/25/activatation-function-neuron.html"},"@context":"https://schema.org"}</script>
+{"author":{"@type":"Person","name":"Omer"},"description":"Coding of activation functions commonly used in deep learning to regulate the output of basic procesing unit (neuron).","@type":"BlogPosting","headline":"Activation function options for a single neuron","dateModified":"2020-07-25T00:00:00-05:00","datePublished":"2020-07-25T00:00:00-05:00","url":"https://dr-omer.github.io/blog/deeplearning/python/2020/07/25/activatation-function-neuron.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://dr-omer.github.io/blog/deeplearning/python/2020/07/25/activatation-function-neuron.html"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -105,7 +105,7 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Activation function options for a neuron</h1><p class="page-description">In this post I am attempting to summarize the options available to modify the output of any given neuron.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-07-25T00:00:00-05:00" itemprop="datePublished">
+    <h1 class="post-title p-name" itemprop="name headline">Activation function options for a single neuron</h1><p class="page-description">Coding of activation functions commonly used in deep learning to regulate the output of basic procesing unit (neuron).</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-07-25T00:00:00-05:00" itemprop="datePublished">
         Jul 25, 2020
       </time>• 
           <span itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -150,14 +150,10 @@ window.onload = wrap_img;
 
   <div class="post-content e-content" itemprop="articleBody">
     <ul class="section-nav">
-<li class="toc-entry toc-h1"><a href="#Activation-function">Activation function </a>
-<ul>
-<li class="toc-entry toc-h2"><a href="#Sigmoid-activation-Function">Sigmoid activation Function </a></li>
-<li class="toc-entry toc-h2"><a href="#Tanh-activation-function">Tanh activation function </a></li>
-<li class="toc-entry toc-h2"><a href="#ReLu-activation-function">ReLu activation function </a></li>
-<li class="toc-entry toc-h2"><a href="#Softmax-activation-function">Softmax activation function </a></li>
-</ul>
-</li>
+<li class="toc-entry toc-h2"><a href="#Sigmoid">Sigmoid </a></li>
+<li class="toc-entry toc-h2"><a href="#Tanh">Tanh </a></li>
+<li class="toc-entry toc-h2"><a href="#ReLu">ReLu </a></li>
+<li class="toc-entry toc-h2"><a href="#Softmax">Softmax </a></li>
 </ul><!--
 #################################################
 ### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
@@ -174,6 +170,35 @@ window.onload = wrap_img;
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In this post, I am going to discuss how to implement the activation function of a neuron using a simple python code. A neuron is the basic processing unit of any deep learning architecture. It receives two weighted inputs (x and b), adds them together, and outputs the value (y). This value is then subjected to different activation functions (a).</p>
+<p>As the name implies, activation function allows the neuron's output to propagate to the next stage (another neuron) by mapping y to a. The different reasons to have this <em>activated output</em>;</p>
+<ul>
+<li>to keep it in a specific range [low high]</li>
+<li>to keep it positive</li>
+<li>to avoid having larger values</li>
+</ul>
+<p>Over the years, researchers have come up with many activation functions. However, here we will be discussing the most commonly used functions;</p>
+<ol>
+<li><strong>Sigmoid</strong></li>
+<li><strong>Tanh</strong></li>
+<li><strong>RelU</strong></li>
+<li><strong>Softmax</strong></li>
+</ol>
+<p>Top three function are used in intermediate layer neurons (except for input and output layers). <strong>Softmax</strong> is usually employed in the output layer.</p>
+<p>We mathematically define our activation function as</p>
+\begin{equation*}
+Z = \Theta(y)
+\end{equation*}<p></p>
+<p>where,
+$\Theta(y)$ represents the chosen activation functions and 
+$Z$ represents the activated output that will be feed to next stage neuron</p>
+
+</div>
+</div>
+</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -199,35 +224,15 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Activation-function">
-<a class="anchor" href="#Activation-function" aria-hidden="true"><span class="octicon octicon-link"></span></a>Activation function<a class="anchor-link" href="#Activation-function"> </a>
-</h1>
-<ul>
-<li>defined as $a = \sigma(z)$</li>
-<li>$\sigma(z)$ can be<ul>
-<li>sigmoid</li>
-<li>tanh</li>
-<li>ReLu</li>
-<li>Softmax</li>
-</ul>
-</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Sigmoid-activation-Function">
-<a class="anchor" href="#Sigmoid-activation-Function" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sigmoid activation Function<a class="anchor-link" href="#Sigmoid-activation-Function"> </a>
+<h2 id="Sigmoid">
+<a class="anchor" href="#Sigmoid" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sigmoid<a class="anchor-link" href="#Sigmoid"> </a>
 </h2>
 <ul>
-<li>Small changes in input lead to small changes in output (activation)</li>
-<li>exterem changes in input lead to extrem changes in output (activation)</li>
-<li>activation output range [0 1]
+<li>small changes in input lead to small changes in output (activation)</li>
+<li>extreme changes in input lead to extreme changes in output (activation)</li>
+<li>activated output range [0 1]
 \begin{equation*}
-\sigma(z) = \frac{1}{1+e^{-z}}
+\theta(y) = \frac{1}{1+e^{-y}}
 \end{equation*}</li>
 </ul>
 
@@ -241,8 +246,8 @@ window.onload = wrap_img;
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
-    <span class="k">return</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">e</span><span class="o">**-</span><span class="n">z</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">e</span><span class="o">**-</span><span class="n">y</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -252,35 +257,48 @@ window.onload = wrap_img;
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Trying out different values of $y$, we can see that activated output is always positive and never goes beyond 1 (upper limit)</p>
+
+</div>
+</div>
+</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p></p>
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'Sigmoid with w.x+b = z = 0.0001: '</span><span class="p">,</span> <span class="n">sigmoid</span><span class="p">(</span><span class="mf">0.00001</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'Sigmoid with w.x+b = z = 1000  : '</span><span class="p">,</span> <span class="n">sigmoid</span><span class="p">(</span><span class="mi">10000</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'Sigmoid with w.x+b = z = -10   : '</span><span class="p">,</span> <span class="n">sigmoid</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'Sigmoid with w.x+b = z = -100  : '</span><span class="p">,</span> <span class="n">sigmoid</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'Sigmoid with w.x+b = z = -2    : '</span><span class="p">,</span> <span class="n">sigmoid</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = 0.0001: </span><span class="si">{</span><span class="n">sigmoid</span><span class="p">(</span><span class="mf">0.00001</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = 1000  : </span><span class="si">{</span><span class="n">sigmoid</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = -10   : </span><span class="si">{</span><span class="n">sigmoid</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = -100  : </span><span class="si">{</span><span class="n">sigmoid</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = -2    : </span><span class="si">{</span><span class="n">sigmoid</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 </pre></div>
 
     </div>
 </div>
 </div>
 
+    </details>
 <div class="output_wrapper">
 <div class="output">
 
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Sigmoid with w.x+b = z = 0.0001:  0.5000024999999999
-Sigmoid with w.x+b = z = 1000  :  1.0
-Sigmoid with w.x+b = z = -10   :  4.539786870243442e-05
-Sigmoid with w.x+b = z = -100  :  3.7200759760208555e-44
-Sigmoid with w.x+b = z = -2    :  0.11920292202211757
+<pre>Sigmoid with w1.x+ w0.b = y = 0.0001: 0.500
+Sigmoid with w1.x+ w0.b = y = 1000  : 1.000
+Sigmoid with w1.x+ w0.b = y = -10   : 0.000
+Sigmoid with w1.x+ w0.b = y = -100  : 0.000
+Sigmoid with w1.x+ w0.b = y = -2    : 0.119
 </pre>
 </div>
 </div>
@@ -294,13 +312,13 @@ Sigmoid with w.x+b = z = -2    :  0.11920292202211757
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Tanh-activation-function">
-<a class="anchor" href="#Tanh-activation-function" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tanh activation function<a class="anchor-link" href="#Tanh-activation-function"> </a>
+<h2 id="Tanh">
+<a class="anchor" href="#Tanh" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tanh<a class="anchor-link" href="#Tanh"> </a>
 </h2>
 <ul>
-<li>acitvation output range [-1 1]
+<li>activated output range [-1 1]
 \begin{equation*}
-\sigma(z) = \frac{e^{z} - e^{-z}}{e^{z} + e^{-z}}
+\theta(y) = \frac{e^{y} - e^{-y}}{e^{y} + e^{-y}}
 \end{equation*}</li>
 </ul>
 
@@ -314,8 +332,8 @@ Sigmoid with w.x+b = z = -2    :  0.11920292202211757
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">tanh</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">e</span><span class="o">**</span><span class="n">z</span> <span class="o">-</span> <span class="n">e</span><span class="o">**-</span><span class="n">z</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">e</span><span class="o">**</span><span class="n">z</span> <span class="o">+</span> <span class="n">e</span><span class="o">**-</span><span class="n">z</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">tanh</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">e</span><span class="o">**</span><span class="n">y</span> <span class="o">-</span> <span class="n">e</span><span class="o">**-</span><span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">e</span><span class="o">**</span><span class="n">y</span> <span class="o">+</span> <span class="n">e</span><span class="o">**-</span><span class="n">y</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -325,35 +343,48 @@ Sigmoid with w.x+b = z = -2    :  0.11920292202211757
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here again, we can see that by choosing a tanh activation function, the activated output is in the range between [-1, 1].</p>
+
+</div>
+</div>
+</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p></p>
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'Tanh with w.x+b = z = 0.0001: '</span><span class="p">,</span> <span class="n">tanh</span><span class="p">(</span><span class="mf">0.00001</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'Tanh with w.x+b = z = 100   : '</span><span class="p">,</span> <span class="n">tanh</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'Tanh with w.x+b = z = -10   : '</span><span class="p">,</span> <span class="n">tanh</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'Tanh with w.x+b = z = -100  : '</span><span class="p">,</span> <span class="n">tanh</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'Tanh with w.x+b = z = -2    : '</span><span class="p">,</span> <span class="n">tanh</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = 0.0001: </span><span class="si">{</span><span class="n">tanh</span><span class="p">(</span><span class="mf">0.00001</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = 100   : </span><span class="si">{</span><span class="n">tanh</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = -10   : </span><span class="si">{</span><span class="n">tanh</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = -100  : </span><span class="si">{</span><span class="n">tanh</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = -2    : </span><span class="si">{</span><span class="n">tanh</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 </pre></div>
 
     </div>
 </div>
 </div>
 
+    </details>
 <div class="output_wrapper">
 <div class="output">
 
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Tanh with w.x+b = z = 0.0001:  9.999999999621023e-06
-Tanh with w.x+b = z = 100   :  1.0
-Tanh with w.x+b = z = -10   :  -0.9999999958776926
-Tanh with w.x+b = z = -100  :  -1.0
-Tanh with w.x+b = z = -2    :  -0.964027580075817
+<pre>Sigmoid with w1.x+ w0.b = y = 0.0001: 0.000
+Sigmoid with w1.x+ w0.b = y = 100   : 1.000
+Sigmoid with w1.x+ w0.b = y = -10   : -1.000
+Sigmoid with w1.x+ w0.b = y = -100  : -1.000
+Sigmoid with w1.x+ w0.b = y = -2    : -0.964
 </pre>
 </div>
 </div>
@@ -367,16 +398,13 @@ Tanh with w.x+b = z = -2    :  -0.964027580075817
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="ReLu-activation-function">
-<a class="anchor" href="#ReLu-activation-function" aria-hidden="true"><span class="octicon octicon-link"></span></a>ReLu activation function<a class="anchor-link" href="#ReLu-activation-function"> </a>
+<h2 id="ReLu">
+<a class="anchor" href="#ReLu" aria-hidden="true"><span class="octicon octicon-link"></span></a>ReLu<a class="anchor-link" href="#ReLu"> </a>
 </h2>
-<ul>
-<li>activation range [0 z] 
+<p>Rectified linear unit is the most commonly used activation function in deep learning architectures (CNN, RNN, etc.). It is mathematically defined as shown below with the activation range of [0 z]</p>
 \begin{equation*}
-a = \sigma(z) = max(0,z)
-\end{equation*}</li>
-</ul>
-
+\theta(y) = max(0,y)
+\end{equation*}
 </div>
 </div>
 </div>
@@ -387,8 +415,8 @@ a = \sigma(z) = max(0,z)
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">relu</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">relu</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -398,35 +426,48 @@ a = \sigma(z) = max(0,z)
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As we see this function simply rectifies the activated output when $y$ is negative</p>
+
+</div>
+</div>
+</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p></p>
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'ReLu with w.x+b = z = 0.0001: '</span><span class="p">,</span> <span class="n">relu</span><span class="p">(</span><span class="mf">0.00001</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'ReLu with w.x+b = z = 100   : '</span><span class="p">,</span> <span class="n">relu</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'ReLu with w.x+b = z = -10   : '</span><span class="p">,</span> <span class="n">relu</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'ReLu with w.x+b = z = -100  : '</span><span class="p">,</span> <span class="n">relu</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'ReLu with w.x+b = z = -2    : '</span><span class="p">,</span> <span class="n">relu</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = 0.0001: </span><span class="si">{</span><span class="n">relu</span><span class="p">(</span><span class="mf">0.00001</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = 100   : </span><span class="si">{</span><span class="n">relu</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = -10   : </span><span class="si">{</span><span class="n">relu</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = -100  : </span><span class="si">{</span><span class="n">relu</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = -2    : </span><span class="si">{</span><span class="n">relu</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 </pre></div>
 
     </div>
 </div>
 </div>
 
+    </details>
 <div class="output_wrapper">
 <div class="output">
 
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>ReLu with w.x+b = z = 0.0001:  1e-05
-ReLu with w.x+b = z = 100   :  100
-ReLu with w.x+b = z = -10   :  0
-ReLu with w.x+b = z = -100  :  0
-ReLu with w.x+b = z = -2    :  0
+<pre>Sigmoid with w1.x+ w0.b = y = 0.0001: 0.000
+Sigmoid with w1.x+ w0.b = y = 100   : 100.000
+Sigmoid with w1.x+ w0.b = y = -10   : 0.000
+Sigmoid with w1.x+ w0.b = y = -100  : 0.000
+Sigmoid with w1.x+ w0.b = y = -2    : 0.000
 </pre>
 </div>
 </div>
@@ -440,29 +481,18 @@ ReLu with w.x+b = z = -2    :  0
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Softmax-activation-function">
-<a class="anchor" href="#Softmax-activation-function" aria-hidden="true"><span class="octicon octicon-link"></span></a>Softmax activation function<a class="anchor-link" href="#Softmax-activation-function"> </a>
+<h2 id="Softmax">
+<a class="anchor" href="#Softmax" aria-hidden="true"><span class="octicon octicon-link"></span></a>Softmax<a class="anchor-link" href="#Softmax"> </a>
 </h2>
-<ul>
-<li>
-<p>activation range</p>
-</li>
-<li>
-<p>For single ouput neuron
+<p>As mentioned before, <strong>softmax</strong> is usually employed in the output layer. As an example, if there are 3 neurons in the output layer, softmax will indicate which of the three neurons has the highest activated output. This is usually done to decide the categorical output in response to an input <strong>X</strong> to our neural network.</p>
+<p>Let us first define the activation function for a single neuron $i$ as</p>
 \begin{equation*}
-\sigma(z) = e^{z} ~~~~~~~~~~~~~~~~~~~~~~~(1)
-\end{equation*}</p>
-</li>
-<li>
-<p>Combining results over all $K$ output neurons; hence softmax (normalizing each $ith$ neuron by total $K$ neurons)</p>
-</li>
-</ul>
+\theta(y_{i}) = e^{y_{i}} ~~~~~~~~~~~~~~~~~~~~~~~(1)
+\end{equation*}<p>We then normalize the activated output of each neuron by combined activation of all the $M$ neurons.</p>
 \begin{equation*}
-\sigma(z)_{i} = \frac {e^{z_{i}}} {\sum_{j=1}^{K} e^{z_{j}}} ~~~~~~~~~~~~~~~~~~~~~~~(2)
-\end{equation*}<p>for $i=1...K$</p>
-<ul>
-<li>In the end for selecting winning neuron we appy np.argmax()</li>
-</ul>
+\theta(y_{i}) = \frac {e^{y_{i}}} {\sum_{j=1}^{M} e^{y_{j}}} ~~~~~~~~~~~~~~~~~~~~~~~(2)
+\end{equation*}<p>for $i=1...M$</p>
+<p>afterwards, we simply select the neuron with the largest normalized activated output</p>
 
 </div>
 </div>
@@ -497,8 +527,8 @@ ReLu with w.x+b = z = -2    :  0
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">softmax</span><span class="p">(</span><span class="n">z</span><span class="p">):</span> <span class="c1"># concise defination using list comprehension of python</span>
-    <span class="n">each_neuron</span> <span class="o">=</span> <span class="p">[</span><span class="n">exp</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">z</span> <span class="p">]</span> <span class="c1"># compute exp for each individual neuron (eq-1 above)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">softmax</span><span class="p">(</span><span class="n">y</span><span class="p">):</span> 
+    <span class="n">each_neuron</span> <span class="o">=</span> <span class="p">[</span><span class="n">exp</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">y</span> <span class="p">]</span> <span class="c1"># compute exp for each individual neuron (eq-1 above)</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">j</span><span class="o">/</span><span class="nb">sum</span><span class="p">(</span><span class="n">each_neuron</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">each_neuron</span><span class="p">]</span>  <span class="c1"># normalizing each neuron output by total (eq-2 above) </span>
 </pre></div>
 
@@ -509,104 +539,63 @@ ReLu with w.x+b = z = -2    :  0
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here we show example of 3 neurons in output layer</p>
+
+</div>
+</div>
+</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p></p>
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'SoftMax with w.x+b = z = [-1,1,5]   : '</span><span class="p">,</span> <span class="n">softmax</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span> <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'SoftMax with w.x+b = z = [0,2,1]    : '</span><span class="p">,</span> <span class="n">softmax</span><span class="p">([</span><span class="mi">0</span> <span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span> <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'SoftMax with w.x+b = z = [-10,1,5]  : '</span><span class="p">,</span> <span class="n">softmax</span><span class="p">([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">]))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'SoftMax with w.x+b = z = [5,1,5]    : '</span><span class="p">,</span> <span class="n">softmax</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>  <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'SoftMax with w.x+b = z = [3,5,0]    : '</span><span class="p">,</span> <span class="n">softmax</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>  <span class="p">,</span><span class="s1">'</span><span class="se">\n\n</span><span class="s1">'</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = [-1,1,5]  : '</span><span class="p">,</span> <span class="n">softmax</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = [0,2,1]   : '</span><span class="p">,</span> <span class="n">softmax</span><span class="p">([</span><span class="mi">0</span> <span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = [-10,1,5] : '</span><span class="p">,</span> <span class="n">softmax</span><span class="p">([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = [5,1,5]   : '</span><span class="p">,</span> <span class="n">softmax</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = [3,5,0]   : '</span><span class="p">,</span> <span class="n">softmax</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span><span class="s1">'</span><span class="se">\n\n</span><span class="s1">'</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Softmax with argmax to select the winning neuro in output'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'SoftMax with w.x+b = z = [-1,1,5]   : '</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">softmax</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span> <span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'SoftMax with w.x+b = z = [0,2,1]    : '</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">softmax</span><span class="p">([</span><span class="mi">0</span> <span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span> <span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'SoftMax with w.x+b = z = [-10,1,5]  : '</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">softmax</span><span class="p">([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">])))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'SoftMax with w.x+b = z = [5,1,5]    : '</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">softmax</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>  <span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'SoftMax with w.x+b = z = [3,5,0]    : '</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">softmax</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>  <span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = [-1,1,5]  : '</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">softmax</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">])))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = [0,2,1]   : '</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">softmax</span><span class="p">([</span><span class="mi">0</span> <span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = [-10,1,5] : '</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">softmax</span><span class="p">([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">])))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = [5,1,5]   : '</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">softmax</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">])))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Sigmoid with w1.x+ w0.b = y = [3,5,0]   : '</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">softmax</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">])))</span>
 </pre></div>
 
     </div>
 </div>
 </div>
 
+    </details>
 <div class="output_wrapper">
 <div class="output">
 
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>SoftMax with w.x+b = z = [-1,1,5]   :  [0.0024282580295913376, 0.017942534803329194, 0.9796292071670795]
-SoftMax with w.x+b = z = [0,2,1]    :  [0.09003057317038046, 0.6652409557748219, 0.24472847105479764]
-SoftMax with w.x+b = z = [-10,1,5]  :  [3.0040020689707753e-07, 0.017986204559030366, 0.9820134950407627]
-SoftMax with w.x+b = z = [5,1,5]    :  [0.4954626425778431, 0.009074714844313747, 0.4954626425778431]
-SoftMax with w.x+b = z = [3,5,0]    :  [0.11849965453500957, 0.8756005950630876, 0.005899750401902781] 
+<pre>Sigmoid with w1.x+ w0.b = y = [-1,1,5]  :  [0.0024282580295913376, 0.017942534803329194, 0.9796292071670795]
+Sigmoid with w1.x+ w0.b = y = [0,2,1]   :  [0.09003057317038046, 0.6652409557748219, 0.24472847105479764]
+Sigmoid with w1.x+ w0.b = y = [-10,1,5] :  [3.0040020689707753e-07, 0.017986204559030366, 0.9820134950407627]
+Sigmoid with w1.x+ w0.b = y = [5,1,5]   :  [0.4954626425778431, 0.009074714844313747, 0.4954626425778431]
+Sigmoid with w1.x+ w0.b = y = [3,5,0]   :  [0.11849965453500957, 0.8756005950630876, 0.005899750401902781] 
 
 
 Softmax with argmax to select the winning neuro in output
-SoftMax with w.x+b = z = [-1,1,5]   :  2
-SoftMax with w.x+b = z = [0,2,1]    :  1
-SoftMax with w.x+b = z = [-10,1,5]  :  2
-SoftMax with w.x+b = z = [5,1,5]    :  0
-SoftMax with w.x+b = z = [3,5,0]    :  1
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    
-
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'SoftMax with w.x+b = z = [-1,1,5]   : '</span><span class="p">,</span> <span class="n">softmax_expansive</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span> <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'SoftMax with w.x+b = z = [0,2,1]    : '</span><span class="p">,</span> <span class="n">softmax_expansive</span><span class="p">([</span><span class="mi">0</span> <span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span> <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'SoftMax with w.x+b = z = [-10,1,5]  : '</span><span class="p">,</span> <span class="n">softmax_expansive</span><span class="p">([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">]))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'SoftMax with w.x+b = z = [5,1,5]    : '</span><span class="p">,</span> <span class="n">softmax_expansive</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>  <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'SoftMax with w.x+b = z = [3,5,0]    : '</span><span class="p">,</span> <span class="n">softmax_expansive</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>  <span class="p">,</span><span class="s1">'</span><span class="se">\n\n</span><span class="s1">'</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">'Softmax with argmax to select the winning neuro in output'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'SoftMax with w.x+b = z = [-1,1,5]   : '</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">softmax_expansive</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span> <span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'SoftMax with w.x+b = z = [0,2,1]    : '</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">softmax_expansive</span><span class="p">([</span><span class="mi">0</span> <span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span> <span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'SoftMax with w.x+b = z = [-10,1,5]  : '</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">softmax_expansive</span><span class="p">([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">])))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'SoftMax with w.x+b = z = [5,1,5]    : '</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">softmax_expansive</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>  <span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'SoftMax with w.x+b = z = [3,5,0]    : '</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">softmax_expansive</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>  <span class="p">))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>SoftMax with w.x+b = z = [-1,1,5]   :  [0.00242826 0.01794253 0.97962921]
-SoftMax with w.x+b = z = [0,2,1]    :  [0.09003057 0.66524096 0.24472847]
-SoftMax with w.x+b = z = [-10,1,5]  :  [3.00400207e-07 1.79862046e-02 9.82013495e-01]
-SoftMax with w.x+b = z = [5,1,5]    :  [0.49546264 0.00907471 0.49546264]
-SoftMax with w.x+b = z = [3,5,0]    :  [0.11849965 0.8756006  0.00589975] 
-
-
-Softmax with argmax to select the winning neuro in output
-SoftMax with w.x+b = z = [-1,1,5]   :  2
-SoftMax with w.x+b = z = [0,2,1]    :  1
-SoftMax with w.x+b = z = [-10,1,5]  :  2
-SoftMax with w.x+b = z = [5,1,5]    :  0
-SoftMax with w.x+b = z = [3,5,0]    :  1
+Sigmoid with w1.x+ w0.b = y = [-1,1,5]  :  2
+Sigmoid with w1.x+ w0.b = y = [0,2,1]   :  1
+Sigmoid with w1.x+ w0.b = y = [-10,1,5] :  2
+Sigmoid with w1.x+ w0.b = y = [5,1,5]   :  0
+Sigmoid with w1.x+ w0.b = y = [3,5,0]   :  1
 </pre>
 </div>
 </div>

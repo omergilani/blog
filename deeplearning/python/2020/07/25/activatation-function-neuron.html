@@ -113,7 +113,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      5 min read
+      6 min read
     
 </span></p>
 
@@ -195,6 +195,7 @@ Z = \Theta(y)
 <p>where,
 $\Theta(y)$ represents the chosen activation functions and 
 $Z$ represents the activated output that will be feed to next stage neuron</p>
+<p>To begin, we import required modules.</p>
 
 </div>
 </div>
@@ -210,7 +211,12 @@ $Z$ represents the activated output that will be feed to next stage neuron</p>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
-<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">e</span>
+
+<span class="c1"># We can either use e or exp</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">e</span>    <span class="c1"># value of e. e.g., e**y </span>
+<span class="c1">#from math import exp # e as function. e.g., exp(y)</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </pre></div>
 
     </div>
@@ -218,6 +224,40 @@ $Z$ represents the activated output that will be feed to next stage neuron</p>
 </div>
 
     </details>
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="o">+</span><span class="p">(</span><span class="n">e</span><span class="o">**-</span><span class="mi">10</span><span class="p">)</span>
+<span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="o">+</span><span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>1.0000453999297625</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
     
 
@@ -500,35 +540,12 @@ Sigmoid with w1.x+ w0.b = y = -2    : 0.000
     
     
 <div class="cell border-box-sizing code_cell rendered">
-<details class="description">
-      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
-        <p></p>
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
-<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">exp</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-    </details>
-</div>
-    
-
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">softmax</span><span class="p">(</span><span class="n">y</span><span class="p">):</span> 
-    <span class="n">each_neuron</span> <span class="o">=</span> <span class="p">[</span><span class="n">exp</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">y</span> <span class="p">]</span> <span class="c1"># compute exp for each individual neuron (eq-1 above)</span>
+    <span class="n">each_neuron</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="o">**</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">y</span> <span class="p">]</span> <span class="c1"># compute exp for each individual neuron (eq-1 above)</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">j</span><span class="o">/</span><span class="nb">sum</span><span class="p">(</span><span class="n">each_neuron</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">each_neuron</span><span class="p">]</span>  <span class="c1"># normalizing each neuron output by total (eq-2 above) </span>
 </pre></div>
 
@@ -583,11 +600,11 @@ Sigmoid with w1.x+ w0.b = y = -2    : 0.000
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Sigmoid with w1.x+ w0.b = y = [-1,1,5]  :  [0.0024282580295913376, 0.017942534803329194, 0.9796292071670795]
-Sigmoid with w1.x+ w0.b = y = [0,2,1]   :  [0.09003057317038046, 0.6652409557748219, 0.24472847105479764]
-Sigmoid with w1.x+ w0.b = y = [-10,1,5] :  [3.0040020689707753e-07, 0.017986204559030366, 0.9820134950407627]
-Sigmoid with w1.x+ w0.b = y = [5,1,5]   :  [0.4954626425778431, 0.009074714844313747, 0.4954626425778431]
-Sigmoid with w1.x+ w0.b = y = [3,5,0]   :  [0.11849965453500957, 0.8756005950630876, 0.005899750401902781] 
+<pre>Sigmoid with w1.x+ w0.b = y = [-1,1,5]  :  [0.002428258029591338, 0.017942534803329198, 0.9796292071670795]
+Sigmoid with w1.x+ w0.b = y = [0,2,1]   :  [0.09003057317038048, 0.665240955774822, 0.2447284710547977]
+Sigmoid with w1.x+ w0.b = y = [-10,1,5] :  [3.0040020689707774e-07, 0.01798620455903037, 0.9820134950407627]
+Sigmoid with w1.x+ w0.b = y = [5,1,5]   :  [0.4954626425778431, 0.009074714844313748, 0.4954626425778431]
+Sigmoid with w1.x+ w0.b = y = [3,5,0]   :  [0.11849965453500957, 0.8756005950630876, 0.0058997504019027815] 
 
 
 Softmax with argmax to select the winning neuro in output

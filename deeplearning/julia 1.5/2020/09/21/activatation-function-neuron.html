@@ -140,11 +140,7 @@ window.onload = wrap_img;
 </div>
 
           
-          <div class="px-2">
-    <a href="https://colab.research.google.com/github/dr-omer/blog/blob/master/_notebooks/2020-09-21-activatation-function-neuron.ipynb" target="_blank">
-        <img class="notebook-badge-image" src="/blog/assets/badges/colab.svg" alt="Open In Colab"/>
-    </a>
-</div>
+          
         </div>
       </header>
 
@@ -214,6 +210,7 @@ $Z$ represents the activated output that will be feed to next stage neuron</p>
 \theta(y) = \frac{1}{1+e^{-y}}
 \end{equation*}</li>
 </ul>
+<p>A single line function in Julia can be written as follows</p>
 
 </div>
 </div>
@@ -254,7 +251,10 @@ $Z$ represents the activated output that will be feed to next stage neuron</p>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Trying out different values of $y$, we can see that activated output is always positive and never goes beyond 1 (upper limit)</p>
+
+<pre><code>Trying out different values of $y$, we can see that activated output is always positive and never goes beyond 1 (upper limit). 
+
+The `$` sign in print method resolves the arguments. It is convenient way to use variables and functions inside string arguments of `println` function </code></pre>
 
 </div>
 </div>
@@ -262,15 +262,11 @@ $Z$ represents the activated output that will be feed to next stage neuron</p>
     
     
 <div class="cell border-box-sizing code_cell rendered">
-<details class="description">
-      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
-        <p></p>
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
-<span class="n">println</span><span class="p">(</span><span class="s2">"Sigmoid with w1.x+ w0.b = y = 0.0001: $(sigmoid(0.00001))"</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">println</span><span class="p">(</span><span class="s2">"Sigmoid with w1.x+ w0.b = y = 0.0001: $(sigmoid(0.00001))"</span><span class="p">)</span> 
 <span class="n">println</span><span class="p">(</span><span class="s2">"Sigmoid with w1.x+ w0.b = y = 1000  : $(sigmoid(10000))"</span><span class="p">)</span>
 <span class="n">println</span><span class="p">(</span><span class="s2">"Sigmoid with w1.x+ w0.b = y = -10   : $(sigmoid(-10))"</span><span class="p">)</span>
 <span class="n">println</span><span class="p">(</span><span class="s2">"Sigmoid with w1.x+ w0.b = y = -100  : $(sigmoid(-100))"</span><span class="p">)</span>
@@ -281,7 +277,6 @@ $Z$ represents the activated output that will be feed to next stage neuron</p>
 </div>
 </div>
 
-    </details>
 <div class="output_wrapper">
 <div class="output">
 
@@ -533,12 +528,16 @@ Relu with w1.x+ w0.b = y = -2    : 0.0
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">function</span> <span class="n">softmax</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">win</span><span class="o">=</span><span class="n">false</span><span class="p">)</span>
     <span class="n">each_neuron</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># declare empty array</span>
+    
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">y</span>
         <span class="n">push</span><span class="o">!(</span>each_neuron, exp<span class="o">(</span>i<span class="o">))</span> # compute exp <span class="k">for</span> each individual neuron <span class="o">(</span>eq-1 above<span class="o">)</span>
     <span class="n">end</span>
+    
+    <span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">each_neuron</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">eachindex</span><span class="p">(</span><span class="n">each_neuron</span><span class="p">)</span>
-        <span class="n">each_neuron</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">each_neuron</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">each_neuron</span><span class="p">)</span> <span class="c1"># normalizing each neuron output by total (eq-2 above) </span>
+        <span class="n">each_neuron</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">each_neuron</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="n">total</span> <span class="c1"># normalizing each neuron output by total (eq-2 above) </span>
     <span class="n">end</span>
+    
     <span class="k">if</span> <span class="n">win</span> <span class="c1">#if need wining neuron info</span>
         <span class="n">val</span><span class="p">,</span><span class="nb">id</span> <span class="o">=</span> <span class="n">findmax</span><span class="p">(</span> <span class="nb">round</span><span class="o">.</span><span class="p">(</span><span class="n">each_neuron</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="p">)</span>
         <span class="k">return</span> <span class="nb">id</span>
@@ -560,7 +559,7 @@ Relu with w1.x+ w0.b = y = -2    : 0.0
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>3</pre>
+<pre>softmax (generic function with 2 methods)</pre>
 </div>
 
 </div>
@@ -616,19 +615,19 @@ Relu with w1.x+ w0.b = y = -2    : 0.0
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Softmax with w1.x+ w0.b = y = [-1,1,5] : [0.002, 0.018, 1.0]
-Softmax with w1.x+ w0.b = y = [0,2,1]  : [0.09, 0.725, 0.769]
-Softmax with w1.x+ w0.b = y = [-10,1,5]: [0.0, 0.018, 1.0]
-Softmax with w1.x+ w0.b = y = [5,1,5]  : [0.495, 0.018, 0.997]
-Softmax with w1.x+ w0.b = y = [3,5,0]  : [0.118, 0.993, 0.474]
+<pre>Softmax with w1.x+ w0.b = y = [-1,1,5] : [0.002, 0.018, 0.98]
+Softmax with w1.x+ w0.b = y = [0,2,1]  : [0.09, 0.665, 0.245]
+Softmax with w1.x+ w0.b = y = [-10,1,5]: [0.0, 0.018, 0.982]
+Softmax with w1.x+ w0.b = y = [5,1,5]  : [0.495, 0.009, 0.495]
+Softmax with w1.x+ w0.b = y = [3,5,0]  : [0.118, 0.876, 0.006]
 
 
  Softmax with argmax to select the winning neuro in output 
 
 Softmax with w1.x+ w0.b = y = [-1,1,5] : 3
-Softmax with w1.x+ w0.b = y = [0,2,1]  : 3
+Softmax with w1.x+ w0.b = y = [0,2,1]  : 2
 Softmax with w1.x+ w0.b = y = [-10,1,5]: 3
-Softmax with w1.x+ w0.b = y = [5,1,5]  : 3
+Softmax with w1.x+ w0.b = y = [5,1,5]  : 1
 Softmax with w1.x+ w0.b = y = [3,5,0]  : 2
 </pre>
 </div>

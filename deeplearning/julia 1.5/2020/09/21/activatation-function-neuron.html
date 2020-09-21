@@ -132,13 +132,7 @@ window.onload = wrap_img;
     
       
         <div class="pb-5 d-flex flex-wrap flex-justify-end">
-          <div class="px-2">
-
-    <a href="https://github.com/dr-omer/blog/tree/master/_notebooks/2020-09-21-activatation-function-neuron.ipynb" role="button" target="_blank">
-<img class="notebook-badge-image" src="/blog/assets/badges/github.svg" alt="View On GitHub">
-    </a>
-</div>
-
+          
           
           
         </div>
@@ -169,7 +163,7 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>In this post, I am going to discuss how to implement the activation function of a neuron using a simple python code. A neuron is the basic processing unit of any deep learning architecture. It receives two weighted inputs (x and b), adds them together, and outputs the value (y). This value is then subjected to different activation functions (a).</p>
+<p>In this post, I am going to discuss how to implement the activation function of a neuron using a simple python code. A neuron is the basic processing unit of any deep learning architecture. It receives two weighted inputs (x and b), adds them together, and outputs the value (y). This value is then subjected to different activation functions (A).</p>
 <p>As the name implies, activation function allows the neuron's output to propagate to the next stage (another neuron) by mapping y to a. The different reasons to have this <em>activated output</em>;</p>
 <ul>
 <li>to keep it in a specific range [low high]</li>
@@ -186,12 +180,16 @@ window.onload = wrap_img;
 <p>Top three function are used in intermediate layer neurons (except for input and output layers). <strong>Softmax</strong> is usually employed in the output layer.</p>
 <p>We mathematically define our activation function as</p>
 \begin{equation*}
-Z = \Theta(y)
+A = \theta(y)
 \end{equation*}<p></p>
 <p>where,
-$\Theta(y)$ represents the chosen activation functions and 
-$Z$ represents the activated output that will be feed to next stage neuron</p>
-<p>In Julia we do not need to import any library.</p>
+$\theta(y)$ represents the chosen activation functions and 
+$A$ represents the activated output that will be feed to next stage neuron
+</p>
+<div class="flash">
+    <svg class="octicon octicon-info octicon octicon-info octicon octicon-info" viewbox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
+    <strong>Note: </strong>In Julia we do not need to import any library to achieve following functionality
+</div>
 
 </div>
 </div>
@@ -210,7 +208,7 @@ $Z$ represents the activated output that will be feed to next stage neuron</p>
 \theta(y) = \frac{1}{1+e^{-y}}
 \end{equation*}</li>
 </ul>
-<p>A single line function in Julia can be written as follows</p>
+<p>A single line function in Julia can be written as follows.</p>
 
 </div>
 </div>
@@ -251,8 +249,12 @@ $Z$ represents the activated output that will be feed to next stage neuron</p>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Trying out different values of $y$, we can see that activated output is always positive and never goes beyond 1 (upper limit).</p>
-<p>The <code>$</code> sign in print method resolves the arguments. It is convenient way to use variables and functions inside string arguments of <code>println</code> function</p>
+<p></p>
+<div class="flash flash-warn">
+    <svg class="octicon octicon-zap octicon octicon-zap" viewbox="0 0 10 16" version="1.1" width="10" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M10 7H6l3-7-9 9h4l-3 7 9-9z"></path></svg>
+    <strong>Important: </strong>The <code>round</code> function is just used to limit the result to 3 significant digits. It’s not necessary to achieve the functionality of sigmoid and is merely used for display convenience.  
+</div>
+Trying out different values of $y$, we can see that activated output is always positive and never goes beyond 1 (upper limit).
 
 </div>
 </div>
@@ -299,6 +301,11 @@ Sigmoid with w1.x+ w0.b = y = -2    : 0.119
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p></p>
+<div class="flash flash-warn">
+    <svg class="octicon octicon-zap octicon octicon-zap octicon octicon-zap" viewbox="0 0 10 16" version="1.1" width="10" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M10 7H6l3-7-9 9h4l-3 7 9-9z"></path></svg>
+    <strong>Important: </strong>The <code>$</code> sign resolves the arguments. It is convenient way to use variables and functions inside string arguments of <code>println</code> function
+</div>
 <h2 id="Tanh">
 <a class="anchor" href="#Tanh" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tanh<a class="anchor-link" href="#Tanh"> </a>
 </h2>
@@ -417,9 +424,7 @@ tanh with w1.x+ w0.b = y = -2    : -0.964
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#def relu(y):</span>
-<span class="c1">#    return max(0,y)</span>
-<span class="n">relu</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">digits</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">relu</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">digits</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -464,7 +469,6 @@ tanh with w1.x+ w0.b = y = -2    : -0.964
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
-
 <span class="n">println</span><span class="p">(</span><span class="s2">"Relu with w1.x+ w0.b = y = 0.0001: $(relu(0.00001))"</span><span class="p">)</span>
 <span class="n">println</span><span class="p">(</span><span class="s2">"Relu with w1.x+ w0.b = y = 1000  : $(relu(100))"</span><span class="p">)</span>
 <span class="n">println</span><span class="p">(</span><span class="s2">"Relu with w1.x+ w0.b = y = -10   : $(relu(-10))"</span><span class="p">)</span>
@@ -527,20 +531,22 @@ Relu with w1.x+ w0.b = y = -2    : 0.0
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">function</span> <span class="n">softmax</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">win</span><span class="o">=</span><span class="n">false</span><span class="p">)</span>
     <span class="n">each_neuron</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># declare empty array</span>
     
+    <span class="c1">#compute exp for each individual neuron (eq-1 above)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">y</span>
-        <span class="n">push</span><span class="o">!(</span>each_neuron, exp<span class="o">(</span>i<span class="o">))</span> # compute exp <span class="k">for</span> each individual neuron <span class="o">(</span>eq-1 above<span class="o">)</span>
+        <span class="n">push</span><span class="o">!(</span>each_neuron, exp<span class="o">(</span>i<span class="o">))</span> 
     <span class="n">end</span>
     
+    <span class="c1">#normalizing each neuron output by total (eq-2 above) </span>
     <span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">each_neuron</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">eachindex</span><span class="p">(</span><span class="n">each_neuron</span><span class="p">)</span>
-        <span class="n">each_neuron</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">each_neuron</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="n">total</span> <span class="c1"># normalizing each neuron output by total (eq-2 above) </span>
+        <span class="n">each_neuron</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">each_neuron</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="n">total</span> 
     <span class="n">end</span>
     
     <span class="k">if</span> <span class="n">win</span> <span class="c1">#if need wining neuron info</span>
         <span class="n">val</span><span class="p">,</span><span class="nb">id</span> <span class="o">=</span> <span class="n">findmax</span><span class="p">(</span> <span class="nb">round</span><span class="o">.</span><span class="p">(</span><span class="n">each_neuron</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="p">)</span>
         <span class="k">return</span> <span class="nb">id</span>
     <span class="k">else</span>
-        <span class="k">return</span> <span class="nb">round</span><span class="o">.</span><span class="p">(</span><span class="n">each_neuron</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># element-wise operation on each element of array</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="o">.</span><span class="p">(</span><span class="n">each_neuron</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># dot shows element-wise operation on each element of array</span>
     <span class="n">end</span>
 <span class="n">end</span>
 </pre></div>

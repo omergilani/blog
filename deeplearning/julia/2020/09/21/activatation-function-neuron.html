@@ -11,13 +11,13 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Coding of activation functions commonly used in deep learning to regulate the output of basic procesing unit (neuron)." />
 <meta property="og:description" content="Coding of activation functions commonly used in deep learning to regulate the output of basic procesing unit (neuron)." />
-<link rel="canonical" href="https://dr-omer.github.io/blog/deeplearning/julia%201.5/2020/09/21/activatation-function-neuron.html" />
-<meta property="og:url" content="https://dr-omer.github.io/blog/deeplearning/julia%201.5/2020/09/21/activatation-function-neuron.html" />
+<link rel="canonical" href="https://dr-omer.github.io/blog/deeplearning/julia/2020/09/21/activatation-function-neuron.html" />
+<meta property="og:url" content="https://dr-omer.github.io/blog/deeplearning/julia/2020/09/21/activatation-function-neuron.html" />
 <meta property="og:site_name" content="My blog" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-09-21T00:00:00-05:00" />
 <script type="application/ld+json">
-{"author":{"@type":"Person","name":"Omer"},"headline":"Activation function options for a single neuron","description":"Coding of activation functions commonly used in deep learning to regulate the output of basic procesing unit (neuron).","datePublished":"2020-09-21T00:00:00-05:00","dateModified":"2020-09-21T00:00:00-05:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://dr-omer.github.io/blog/deeplearning/julia%201.5/2020/09/21/activatation-function-neuron.html"},"url":"https://dr-omer.github.io/blog/deeplearning/julia%201.5/2020/09/21/activatation-function-neuron.html","@context":"https://schema.org"}</script>
+{"author":{"@type":"Person","name":"Omer"},"headline":"Activation function options for a single neuron","description":"Coding of activation functions commonly used in deep learning to regulate the output of basic procesing unit (neuron).","datePublished":"2020-09-21T00:00:00-05:00","dateModified":"2020-09-21T00:00:00-05:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://dr-omer.github.io/blog/deeplearning/julia/2020/09/21/activatation-function-neuron.html"},"url":"https://dr-omer.github.io/blog/deeplearning/julia/2020/09/21/activatation-function-neuron.html","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://dr-omer.github.io/blog/feed.xml" title="My blog" /><link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
 <title>Activation function options for a single neuron | My blog</title>
@@ -27,13 +27,13 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Coding of activation functions commonly used in deep learning to regulate the output of basic procesing unit (neuron)." />
 <meta property="og:description" content="Coding of activation functions commonly used in deep learning to regulate the output of basic procesing unit (neuron)." />
-<link rel="canonical" href="https://dr-omer.github.io/blog/deeplearning/julia%201.5/2020/09/21/activatation-function-neuron.html" />
-<meta property="og:url" content="https://dr-omer.github.io/blog/deeplearning/julia%201.5/2020/09/21/activatation-function-neuron.html" />
+<link rel="canonical" href="https://dr-omer.github.io/blog/deeplearning/julia/2020/09/21/activatation-function-neuron.html" />
+<meta property="og:url" content="https://dr-omer.github.io/blog/deeplearning/julia/2020/09/21/activatation-function-neuron.html" />
 <meta property="og:site_name" content="My blog" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-09-21T00:00:00-05:00" />
 <script type="application/ld+json">
-{"author":{"@type":"Person","name":"Omer"},"headline":"Activation function options for a single neuron","description":"Coding of activation functions commonly used in deep learning to regulate the output of basic procesing unit (neuron).","datePublished":"2020-09-21T00:00:00-05:00","dateModified":"2020-09-21T00:00:00-05:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://dr-omer.github.io/blog/deeplearning/julia%201.5/2020/09/21/activatation-function-neuron.html"},"url":"https://dr-omer.github.io/blog/deeplearning/julia%201.5/2020/09/21/activatation-function-neuron.html","@context":"https://schema.org"}</script>
+{"author":{"@type":"Person","name":"Omer"},"headline":"Activation function options for a single neuron","description":"Coding of activation functions commonly used in deep learning to regulate the output of basic procesing unit (neuron).","datePublished":"2020-09-21T00:00:00-05:00","dateModified":"2020-09-21T00:00:00-05:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://dr-omer.github.io/blog/deeplearning/julia/2020/09/21/activatation-function-neuron.html"},"url":"https://dr-omer.github.io/blog/deeplearning/julia/2020/09/21/activatation-function-neuron.html","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -123,7 +123,7 @@ window.onload = wrap_img;
         <a class="category-tags-link" href="/blog/categories/#deeplearning">deeplearning</a>
         &nbsp;
       
-        <a class="category-tags-link" href="/blog/categories/#Julia 1.5">Julia 1.5</a>
+        <a class="category-tags-link" href="/blog/categories/#Julia">Julia</a>
         
       
       </p>
@@ -163,7 +163,7 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>In this post, I am going to discuss how to implement the activation function of a neuron using a simple python code. A neuron is the basic processing unit of any deep learning architecture. It receives two weighted inputs (x and b), adds them together, and outputs the value (y). This value is then subjected to different activation functions (A).</p>
+<p>In this post, I am going to discuss how to implement the activation function of a neuron using simple python code. A neuron is the basic processing unit of any deep learning architecture. It receives two weighted inputs (x and b), adds them together, and outputs the value (y). This value is then subjected to different activation functions (A).</p>
 <p>As the name implies, activation function allows the neuron's output to propagate to the next stage (another neuron) by mapping y to a. The different reasons to have this <em>activated output</em>;</p>
 <ul>
 <li>to keep it in a specific range [low high]</li>
@@ -188,7 +188,7 @@ $A$ represents the activated output that will be feed to next stage neuron
 </p>
 <div class="flash">
     <svg class="octicon octicon-info octicon octicon-info octicon octicon-info" viewbox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
-    <strong>Note: </strong>In Julia we do not need to import any library to achieve following functionality
+    <strong>Note: </strong>The following code is tested in Julia 1.5 for functionality
 </div>
 
 </div>
@@ -655,7 +655,7 @@ Softmax with w1.x+ w0.b = y = [3,5,0]  : 2
         theme="github-light"
         crossorigin="anonymous"
         async>
-</script><a class="u-url" href="/blog/deeplearning/julia%201.5/2020/09/21/activatation-function-neuron.html" hidden></a>
+</script><a class="u-url" href="/blog/deeplearning/julia/2020/09/21/activatation-function-neuron.html" hidden></a>
 </article>
       </div>
     </main><footer class="site-footer h-card">

@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Machine Learning on MNIST data in Julia using KNN | My blog</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Machine Learning on MNIST data in Julia using KNN" />
+<meta name="author" content="Omer" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Development of machine learning model (KNN) on MNIST data in Julia" />
+<meta property="og:description" content="Development of machine learning model (KNN) on MNIST data in Julia" />
+<link rel="canonical" href="https://dr-omer.github.io/blog/machinelearning/julia/mnist/knn/2020/10/08/MNIST-Julia-KNN.html" />
+<meta property="og:url" content="https://dr-omer.github.io/blog/machinelearning/julia/mnist/knn/2020/10/08/MNIST-Julia-KNN.html" />
+<meta property="og:site_name" content="My blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-10-08T00:00:00-05:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Omer"},"headline":"Machine Learning on MNIST data in Julia using KNN","description":"Development of machine learning model (KNN) on MNIST data in Julia","datePublished":"2020-10-08T00:00:00-05:00","dateModified":"2020-10-08T00:00:00-05:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://dr-omer.github.io/blog/machinelearning/julia/mnist/knn/2020/10/08/MNIST-Julia-KNN.html"},"url":"https://dr-omer.github.io/blog/machinelearning/julia/mnist/knn/2020/10/08/MNIST-Julia-KNN.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://dr-omer.github.io/blog/feed.xml" title="My blog" /><link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Machine Learning on MNIST data in Julia using KNN | My blog</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Machine Learning on MNIST data in Julia using KNN" />
+<meta name="author" content="Omer" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Development of machine learning model (KNN) on MNIST data in Julia" />
+<meta property="og:description" content="Development of machine learning model (KNN) on MNIST data in Julia" />
+<link rel="canonical" href="https://dr-omer.github.io/blog/machinelearning/julia/mnist/knn/2020/10/08/MNIST-Julia-KNN.html" />
+<meta property="og:url" content="https://dr-omer.github.io/blog/machinelearning/julia/mnist/knn/2020/10/08/MNIST-Julia-KNN.html" />
+<meta property="og:site_name" content="My blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-10-08T00:00:00-05:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Omer"},"headline":"Machine Learning on MNIST data in Julia using KNN","description":"Development of machine learning model (KNN) on MNIST data in Julia","datePublished":"2020-10-08T00:00:00-05:00","dateModified":"2020-10-08T00:00:00-05:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://dr-omer.github.io/blog/machinelearning/julia/mnist/knn/2020/10/08/MNIST-Julia-KNN.html"},"url":"https://dr-omer.github.io/blog/machinelearning/julia/mnist/knn/2020/10/08/MNIST-Julia-KNN.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://dr-omer.github.io/blog/feed.xml" title="My blog" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/blog/">My blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/blog/about/">About Me</a><a class="page-link" href="/blog/search/">Search</a><a class="page-link" href="/blog/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Machine Learning on MNIST data in Julia using KNN</h1><p class="page-description">Development of machine learning model (KNN) on MNIST data in Julia</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-10-08T00:00:00-05:00" itemprop="datePublished">
+        Oct 8, 2020
+      </time>• 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">Omer</span></span>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      7 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/blog/categories/#machinelearning">machinelearning</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/blog/categories/#Julia">Julia</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/blog/categories/#MNIST">MNIST</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/blog/categories/#KNN">KNN</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          
+          
+          
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#Downloading-dataset">Downloading dataset </a></li>
+<li class="toc-entry toc-h2"><a href="#Train-and-Test-Data-statistics">Train and Test Data statistics </a></li>
+<li class="toc-entry toc-h2"><a href="#Machine-Learning-using-KNN">Machine Learning using KNN </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#Training">Training </a></li>
+<li class="toc-entry toc-h3"><a href="#Testing">Testing </a></li>
+</ul>
+</li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-10-7 MNIST-Julia-KNN.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In this tutorial, we are going to develop a machine learning system (KNN) for recognizing digits (0 to 9) from MNIST dataset.</p>
+<p>Let's start by including all the necessary packages.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">using</span> <span class="n">MLDatasets</span> <span class="c1"># for MNIST data</span>
+<span class="n">using</span> <span class="n">Images</span>     <span class="c1"># for display of Images</span>
+<span class="n">using</span> <span class="n">Plots</span>      <span class="c1"># for multiple image display in single figure</span>
+<span class="n">using</span> <span class="n">Flux</span>       <span class="c1"># for loss function</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We are using</p>
+<ol>
+<li>
+<code>MLDatasets</code> package to access the MNIST dataset.</li>
+<li>
+<code>Image</code> package to visualize images</li>
+<li>
+<code>Plots</code> package to visualize images in sub-plot scheme</li>
+<li>
+<code>Flux</code>  package for loss function</li>
+</ol>
+<h2 id="Downloading-dataset">
+<a class="anchor" href="#Downloading-dataset" aria-hidden="true"><span class="octicon octicon-link"></span></a>Downloading dataset<a class="anchor-link" href="#Downloading-dataset"> </a>
+</h2>
+<p>Let's go ahead with downloading of a full MNIST data using <code>MLDatasets</code> package. Once the dataset is downloaded on local machine we load it into train and test variable.</p>
+<ul>
+<li>
+<strong>xtrain</strong> : triaing images</li>
+<li>
+<strong>ytrain</strong> : class label for training images</li>
+<li>
+<strong>xtest</strong>  : testing images</li>
+<li>
+<strong>ytest</strong>  : class label for testing images</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p></p>
+<div class="Toast Toast--warning googoo">
+   <span class="Toast-icon"><svg class="octicon octicon-alert octicon octicon-alert" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 000 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 00.01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path></svg></span>
+   <span class="Toast-content">It may take some time if you are downloading dataset for the first time</span>
+</div>
+
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xtrain</span><span class="p">,</span> <span class="n">ytrain</span> <span class="o">=</span> <span class="n">MNIST</span><span class="o">.</span><span class="n">traindata</span><span class="p">(</span><span class="n">Float32</span><span class="p">);</span>
+<span class="n">xtest</span><span class="p">,</span> <span class="n">ytest</span> <span class="o">=</span> <span class="n">MNIST</span><span class="o">.</span><span class="n">testdata</span><span class="p">(</span><span class="n">Float32</span><span class="p">);</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can now see the dimensions and type of MNIST data</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">println</span><span class="p">(</span><span class="s2">"Train data size $(size(xtrain)) with $(size(ytrain)) Labels"</span><span class="p">)</span>
+<span class="n">println</span><span class="p">(</span><span class="s2">"Test data size $(size(xtest)) with $(size(ytest)) Labels"</span><span class="p">)</span>
+<span class="n">println</span><span class="p">(</span><span class="s2">"Type of data $(typeof(xtrain))"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Train data size (28, 28, 60000) with (60000,) Labels
+Test data size (28, 28, 10000) with (10000,) Labels
+Type of data Array{Float32,3}
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's visualize an image from training set.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Gray</span><span class="o">.</span><span class="p">(</span><span class="n">xtrain</span><span class="p">[:,:,</span><span class="mi">3</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea output_execute_result">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHAAAABwCAAAAADji6uXAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAGQSURBVGje7dgxaxRBGMbxn0cQ0iSgSAiEgEVIp5WFFiKkCWkCQipBsEiTr2El+AEsRPwCgtpYWFkZiKKNIgqBBARLQTAKgVjsCsexB7kJmtmX96mOmZ377/8eZm9YMplMJnPSnDnuhZewhuWhsQNsTQgc/G/D+MCpcRPXcQO327uaw/TINUfYw72aDeMDx3Z4Hkt4PTL+ATs4hwe4VrthfOCxn6VdeYd9rNdsmMAEJjCB/z5TpQsva86q+7UbxgcWdzjQ/Jk+q90wPrC4wxUc4mPthvGBxR0u4Ce2azeMDyzu8KzJ9+CpGMYHFnd4C4/6YBgfWNThTHunb/pgGB9Y1OGq5n33qz4YxgcWvWt73i68iTuaM+q4vMDj0zSMD5yowzncxwZ+4xcudHzh0cjnYav4P2ldz9IB5vEQs7io6fHvwmns4gmetuNL7bqrtRjGB3buwxVc0XS2OTL3GXfxFp/6YBgf2NnhN82ZcxHv8QUv8RU/8L1PhvGBnR0uD02W7LWqDOMDM5lMJpPJZCLkD8weLdO/H8RmAAAAAElFTkSuQmCC">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>MNIST dataset stores images in horizontal-major compared to usual vertical-major alignment. Therefor to show the image properly (in verticle alignment) we need to use the <code>convert2image</code> function (provided by the MNIST dataset).</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">MNIST</span><span class="o">.</span><span class="n">convert2image</span><span class="p">(</span><span class="n">xtrain</span><span class="p">[:,:,</span><span class="mi">3</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea output_execute_result">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHAAAABwCAAAAADji6uXAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAGlSURBVGje7dixS5VRHMbxj3IJWhILESGCBmmzqSEHCy5EtDcpbhr0bzQFzk0ODjVGOjU0OVmko5EJQVJDWyAkgVDDe8Dee68k773kuT/Osxzuue99vuc5D+d9uS9FRUVFRUVFRcOvkUEbtvECd7DX4/vR/50wPrDVOTGHK3jV0PAWtnNKGB/Y1eFdTGvW4Siu45rTD3j8LT3/Dhex1dBsCkt4jo+5JIwP7OqwnxWspnE/p4TxgbUOZzDZh9lYGt/klDA+sNbhA1xsaDSpehbCt5wSxgfWOryRxt0GRiuqHj/hMKeE8YGtXpPvz/jjS7iPBdxLc0/wI6eE8YE9O7zc8flmWlkbV3EB82nuCO/wK5nt5JYwPrD2N+4ZHqnO0cFf8zPpwmP8xAdVb9vYxHd8xbiq36wSxgfWzuFjfMFsx0UH2FB197aHyTIm8DnHhPGBXffSpw1M2ml8mWPC+MBW/xYnWs8xYQEWYP7AgZ3DEdW78n+9a42/pcPb4e8zrj7+lg5vh3Aba7kljA8c6L00y4TxgQPp8DUe5powPrCoqKioqH/9ATeSLmyCLr3XAAAAAElFTkSuQmCC">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Important &gt;  We are using Gray function to convert Array{Float32,2} data to Array{ColorTypes.Gray{Float32,2}}. If we do not do this, Juno/IJulia will show it as an array of numbers rather then showing it as an image. The .dot notation is used to apply the operation elements-wise</p>
+<p>And to show it in inverted colours</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Gray</span><span class="o">.</span><span class="p">(</span><span class="mi">1</span> <span class="o">.-</span> <span class="n">MNIST</span><span class="o">.</span><span class="n">convert2image</span><span class="p">(</span><span class="n">xtrain</span><span class="p">[:,:,</span><span class="mi">3</span><span class="p">]))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea output_execute_result">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHAAAABwCAAAAADji6uXAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAGxSURBVGje7dqxaxVBFMXh70lAFAS7FEoEQQ1aGlErKwsrFUstLFKlFqzybwSinWhlLyI8UAstrEwnKYQQkCAqSSNISCxmi7y8J4Z9S7y5zjTDDrvnx5nDzO5ctrdtf9uhfeZVYAVWYAVWYAVW4H8BnOhasI+7eINzERzmBw5l+BbfcLul4AfMRHKYHziU4Wssa5fhFj5jBX86s+Sf0n+f4RNcbSn2BY9xD9NRHOYHDmW4NYbYbNOfieQwP3AgwyWsjSG23vTXIznMDxzI8AV+thRaU96FcCKSw/zAgQw/Nf2FFkIPlBzP4lgkh/mBI8+Hl/b48AZe4ileNWPzOB7JYX7gyAy/77r+qHzr9LGKX3jWjB3BZRzGJi5Gc5gf2Nt5jpvDorKOpnaMLynnvQkcxXkltxlcwyRO4oeSbyiH+YED63ABp/Bu101TuKlkd2WEyCN8xemIDvMDh/bShy1E+k1/J6LD/MBOa963IjqswAqMD+xsHW4rtfK/1VrzT+nBzbBnb7XW/FN6cDOE97gfzWF+YKd7aUiH+YGdZHgDz6M6zA/s1X+EK7ACK7ACx26/AX7POlRNlDyzAAAAAElFTkSuQmCC">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Train-and-Test-Data-statistics">
+<a class="anchor" href="#Train-and-Test-Data-statistics" aria-hidden="true"><span class="octicon octicon-link"></span></a>Train and Test Data statistics<a class="anchor-link" href="#Train-and-Test-Data-statistics"> </a>
+</h2>
+<p>Let's see some basic statisitcs on train and test data.</p>
+<ol>
+<li><strong>Counting examples per class in train/test dataset</strong></li>
+</ol>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cats</span> <span class="o">=</span> <span class="n">sort</span><span class="o">!(</span>unique<span class="o">(</span>ytrain<span class="o">))</span> # Classes
+<span class="n">count_per_class_train_data</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">Int32</span><span class="p">,</span> <span class="n">length</span><span class="p">(</span><span class="n">cats</span><span class="p">))</span>
+<span class="n">count_per_class_test_data</span>  <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">Int32</span><span class="p">,</span> <span class="n">length</span><span class="p">(</span><span class="n">cats</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ytrain</span>
+    <span class="n">count_per_class_train_data</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="n">end</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ytest</span>
+    <span class="n">count_per_class_test_data</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="n">end</span>
+
+<span class="n">println</span><span class="p">(</span><span class="s2">"classes :"</span><span class="p">,</span><span class="n">cats</span><span class="p">,</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">println</span><span class="p">(</span><span class="s2">"Number of exmaples in train data per class : </span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="n">count_per_class_train_data</span><span class="p">,</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">println</span><span class="p">(</span><span class="s2">"Number of exmaples in test data per class : </span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="n">count_per_class_test_data</span><span class="p">,</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>classes :[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+Number of exmaples in train data per class : 
+Int32[5923, 6742, 5958, 6131, 5842, 5421, 5918, 6265, 5851, 5949]
+
+Number of exmaples in test data per class : 
+Int32[980, 1135, 1032, 1010, 982, 892, 958, 1028, 974, 1009]
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ol>
+<li><strong>Mean image per class</strong></li>
+</ol>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mean_stk_img</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># mean image per class in vertical-major form</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">cats</span>
+    <span class="k">global</span> <span class="n">mean_img_stk</span>
+    <span class="n">mn_img</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">xtrain</span><span class="p">[:,:,(</span><span class="n">ytrain</span> <span class="o">.==</span> <span class="n">i</span><span class="p">)],</span> <span class="n">dims</span><span class="o">=</span><span class="mi">3</span><span class="p">);</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">Gray</span><span class="o">.</span><span class="p">(</span><span class="mi">1</span> <span class="o">.-</span> <span class="n">MNIST</span><span class="o">.</span><span class="n">convert2image</span><span class="p">(</span><span class="n">mn_img</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">push</span><span class="o">!(</span>mean_stk_img, img<span class="o">)</span> # stacking of images
+<span class="n">end</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's display mean image per class in subplot scheme</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="n">nothing</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="mi">10</span>
+    <span class="n">plot</span><span class="o">!(</span>p<span class="o">[</span>i<span class="o">]</span>,mean_stk_img<span class="o">[</span>i<span class="o">])</span>
+<span class="n">end</span>
+<span class="n">p</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_svg output_subarea output_execute_result">
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600" height="400" viewbox="0 0 2400 1600">
+<defs>
+  <clippath id="clip810">
+    <rect x="0" y="0" width="2400" height="1600"></rect>
+  </clippath>
+</defs>
+<path clip-path="url(#clip810)" d="
+M0 1600 L2400 1600 L2400 0 L0 0  Z
+  " fill="#ffffff" fill-rule="evenodd" fill-opacity="1"></path>
+<defs>
+  <clippath id="clip811">
+    <rect x="480" y="0" width="1681" height="1600"></rect>
+  </clippath>
+</defs>
+<path clip-path="url(#clip810)" d="
+M116.325 454.341 L523.423 454.341 L523.423 47.2441 L116.325 47.2441  Z
+  " fill="#ffffff" fill-rule="evenodd" fill-opacity="1"></path>
+<defs>
+  <clippath id="clip812">
+    <rect x="116" y="47" width="408" height="408"></rect>
+  </clippath>
+</defs>
+<polyline clip-path="url(#clip810)" style="stroke:#000000; stroke-width:4; stroke-opacity:1; fill:none" points="
+  116.325,454.341 523.423,454.341 
+  "></polyline>
+<polyline clip-path="url(#clip810)" style="stroke:#000000; stroke-width:4; stroke-opacity:1; fill:none" points="
+  116.325,47.2441 116.325,454.341 
+  "></polyline>
+<g clip-path="url(#clip812)">
+<image width="422" height="422" xlink:href="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAAaYAAAGmCAYAAAA3cSADAAAN/ElEQVR4nO3d206V6baF4c5WNmqJ
+iIgWVW7q/m+oEku0FBAwIKDshHmyZrJOZrLs30yNxuJ5zlv+IQIv42T0qZubm5sCgBDTk34BAPC/
+CRMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwA
+RBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijABEEWY
+AIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQBRhAiDK
+7KRfAP+/3dzc3KpnTmr739h3TE1NTWT739hP4rmTes13jXdMAEQRJgCiCBMAUYQJgCjCBEAUYQIg
+ijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIqzF7fEJE4iVFX9+PFjYvvz8/PW7vT0tP3M
+r1+/TmRbVfXt27f2tvt1npubaz9zeXm5va2qevjw4US2I6/73r177e3MzEx7e9fObXjHBEAUYQIg
+ijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKI4e/EPGjldMbKd
+xOmJfzs5OWlv9/f3W7vt7e32M9+/f9/efvr0qb2tqjo4OGhvLy4uWrvFxcX2M9fX19vbqqrNzc32
+9uXLl+3txsZGe7u6utrejnyt79rJDO+YAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACI
+IkwARBEmAKIIEwBRhAmAKMIEQBRnL37SbTxdcXZ21t4eHR21t1VVOzs77e3W1lZr9/bt2/Yz3717
+196O/Furxr7WV1dXrd3sbP9XwMrKSntbVbW3t9fejpxTuby8bG9HTkisra21tyMnM24j75gAiCJM
+AEQRJgCiCBMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGcv/kEjZy8u
+Li7a2+Pj4/Z29JTDX3/91d7++eefrV33XEZV1f7+fns7coph1PR072/M7rmMqqovX760t6NGzk/M
+z8+3twsLC+3t0tJSezvymkdOm0yKd0wARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQR
+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
+dk9mjHytrq6u2tujo6P2tmrsbEb36zw1NdV+5traWntbVfX777+3t69evWpvNzc329vV1dX2dlJn
+b26ju/WvBSCeMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggT
+AFHu5NmLe/futbcjH/U/8nH7I6crvn792t7u7e21t1VVu7u77W33TMDIWZOR8wLX19ftbdXYCYoH
+Dx60dhsbG+1nvn79ur2tqnrz5k17O3IyY319vb1dXl5ub2dmZtrbke+N28g7JgCiCBMAUYQJgCjC
+BEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARDF2YufNHL2YuRj/i8vL9vb
+ESNnIKqqPn/+3N52z3WMnAgY+d54+PBhe1tV9ezZs/b2t99+a+1GTle8fPmyva2qev78eXv7+PHj
+9nZpaam9nZ3t/8oc/Vm6S3ylAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwARBEm
+AKIIEwBRhAmAKMIEQJSpm5ubm0m/iH/ayD955PzEyclJeztyPuL9+/ft7dbWVntbVfXx48f29vDw
+sLX78eNH+5n3799vb0dOolRVvXjx4h/frq+vt5+5srLS3lZVLS8vt7fz8/Pt7cj5iZGTKvzfeccE
+QBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAotzJsxcj
+Rr5cI9urq6v29uLior39/v17e1tVdXZ21t52X/f19XX7mTMzM+3tyCmGqqqFhYV/fDs3N9d+5uzs
+bHtb5fwE/5l3TABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIE
+QBRhAiCKsxfE6n5rOokAt5t3TABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKII
+EwBRhAmAKMIEQBRhAiDK7KRfAPwnzlfA3eQdEwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCi
+CBMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwA
+RBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQ5V98Yq4OBskh8QAAAABJRU5ErkJggg==
+" transform="translate(109, 40)"></image>
+</g>
+<path clip-path="url(#clip810)" d="
+M716.325 454.341 L1123.42 454.341 L1123.42 47.2441 L716.325 47.2441  Z
+  " fill="#ffffff" fill-rule="evenodd" fill-opacity="1"></path>
+<defs>
+  <clippath id="clip813">
+    <rect x="716" y="47" width="408" height="408"></rect>
+  </clippath>
+</defs>
+<polyline clip-path="url(#clip810)" style="stroke:#000000; stroke-width:4; stroke-opacity:1; fill:none" points="
+  716.325,454.341 1123.42,454.341 
+  "></polyline>
+<polyline clip-path="url(#clip810)" style="stroke:#000000; stroke-width:4; stroke-opacity:1; fill:none" points="
+  716.325,47.2441 716.325,454.341 
+  "></polyline>
+<g clip-path="url(#clip813)">
+<image width="422" height="422" xlink:href="data:image/png;base64,
+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
+/wBgeoHDHnjaaQAAAABJRU5ErkJggg==
+" transform="translate(709, 40)"></image>
+</g>
+<path clip-path="url(#clip810)" d="
+M1316.33 454.341 L1723.42 454.341 L1723.42 47.2441 L1316.33 47.2441  Z
+  " fill="#ffffff" fill-rule="evenodd" fill-opacity="1"></path>
+<defs>
+  <clippath id="clip814">
+    <rect x="1316" y="47" width="408" height="408"></rect>
+  </clippath>
+</defs>
+<polyline clip-path="url(#clip810)" style="stroke:#000000; stroke-width:4; stroke-opacity:1; fill:none" points="
+  1316.33,454.341 1723.42,454.341 
+  "></polyline>
+<polyline clip-path="url(#clip810)" style="stroke:#000000; stroke-width:4; stroke-opacity:1; fill:none" points="
+  1316.33,47.2441 1316.33,454.341 
+  "></polyline>
+<g clip-path="url(#clip814)">
+<image width="422" height="422" xlink:href="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAAaYAAAGmCAYAAAA3cSADAAANPklEQVR4nO3dyXIb17KG0U2CBAg2
+sizJEZ7Z7/9gshqLnUi0bM7IEXd4lHmP6qe51jyjCgVQn2qy8+D5+fl5AECIw6lvAAD+L2ECIIow
+ARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAU
+YQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKIcTX0D/O89
+Pz+/yGtPcd9TPquOg4ODnzrXnf3/mOffyxsTAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKII
+EwBRhAmAKMIEQBRhAiCKMAEQRZgAiGLtxU/UWanw9PRUnn18fCzP7na78mx3frPZlOa22235mp37
+7XxHXcfHx6W5k5OT8jVPT0/Ls2OMsVgsyrPz+bw8O5vNyrNTrgl5TbwxARBFmACIIkwARBEmAKII
+EwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjWXvygl7h+YrValWdvbm7Ks2OM
+cXl5WZ79+vVrae7bt2/la15fX5dnq2s6/nF4WP9/4nK5LM399ttv5Wv+/vvv5dnutd+9e1eevbi4
+KM92VnV0vt/XtjLDGxMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGEC
+IIowARBFmACI8irXXjw/P5dnO2svttttefb79+/l2c4aiM+fP5dnxxjj48eP5dm//vqrNPfly5fy
+Nadce9H5XZ6enpbmPnz4UL7mH3/8UZ4dY4w///yzPNtZIdPRWT/RWZlh7QUATEiYAIgiTABEESYA
+oggTAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKNZe/KDOcfudtRe3t7fl2cvL
+y/Ls33//XZ7tXrv6mff7ffmah4f1/6sdHx+XZ8fo/baqn7nzu+qsFxmjvqqjO7tcLieZnc/n5dnX
+xhsTAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgAiGLt
+xQ/qrCbY7XaTzD48PJRnuxaLRXn27du3pbnz8/PyNTu/jaenp/LsGL11HZvNpjTX+T13f1d3d3eT
+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
+iCJMAET5D9kh2d8CXRI9AAAAAElFTkSuQmCC
+" transform="translate(1309, 40)"></image>
+</g>
+<path clip-path="url(#clip810)" d="
+M1916.33 454.341 L2323.42 454.341 L2323.42 47.2441 L1916.33 47.2441  Z
+  " fill="#ffffff" fill-rule="evenodd" fill-opacity="1"></path>
+<defs>
+  <clippath id="clip815">
+    <rect x="1916" y="47" width="408" height="408"></rect>
+  </clippath>
+</defs>
+<polyline clip-path="url(#clip810)" style="stroke:#000000; stroke-width:4; stroke-opacity:1; fill:none" points="
+  1916.33,454.341 2323.42,454.341 
+  "></polyline>
+<polyline clip-path="url(#clip810)" style="stroke:#000000; stroke-width:4; stroke-opacity:1; fill:none" points="
+  1916.33,47.2441 1916.33,454.341 
+  "></polyline>
+<g clip-path="url(#clip815)">
+<image width="422" height="422" xlink:href="data:image/png;base64,
+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
+tL0dtbi42N52zyKMvK4ODw/b26qqt2/ftrfb29vt7fr6ens7cvZiZWWlvXX2AgAmJEwARBEmAKII
+EwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgyr29xzRyF+k+bkfu
+sayurra3u7u77W1V1f7+fnvbvcd0cXHRfubIfaLRW13z+by9/fz5c2t3dHTUfubp6Wl7W1X1/v37
+9vabb75pb3d2dtrbkVtOS0v9P7cjd83uo4f13QIQT5gAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIg
+ijABEEWYAIgiTABEESYAoggTAFGECYAok569mOqExMhpg6nOIkx19uLZs2ftbVX/dEVV1eXlZWs3
+1Wvj6uqqva2qms1m7e27d+9au5Hv98OHD+1t1djZjOPj4/b25OSkvR05mbG2ttbeLi4utrcjfzum
+4h0TAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQZdJPFx8x
+8qnI19fX7e3NzU17ex8/mXxjY6O9rapaX18f2ndM9eni8/m8va2qWllZaW+7n5g91SdeV439Wxr5
+Nzzyexp57shr66HxjgmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijAB
+EEWYAIgiTABEubdnL0Y+Mv/y8rK9neoj80dOOSws9P//sby83N5WjZ1G6G5HznxMdYph9Nnn5+et
+3ci/hdEzDiO/p5HtiKnOzzw03jEBEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACI
+IkwARBEmAKIIEwBRhAmAKMIEQJRJ7zGN3DaZ6h7TbDZrby8uLtrbke935A7M6upqezu6X1lZae1G
+vt+rq6v29suXL+1tVdW7d+/a27dv37Z2R0dH7WeOvCar+r/fqrHX1ciNsaWl/p/MkbtoD42fFABR
+hAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijABEEWYAIhyb89e3N7e
+trfz+by9PT09bW8/f/48yXNHvt+Rj/mvqlpbW2tvR09udJydnbW3h4eHQ89+8+ZNe9s9ezHy/W5t
+bbW3VVVPnjyZZPv48eP2duT1PHL2YuSUy33kHRMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYA
+oggTAFGECYAowgRAFGECIIowARBFmACIMunZi5GPch/Zjnz8/MipjpHTFQcHB+3t0dFRe3txcdHe
+Vo39vLq/p+vr6/YzR85AjJw1qar68uVLe3tzc9Pa7ezstJ+5t7fX3lZVvXz5sr397rvv2tuR73nk
+7MXi4mJ7+9B4xwRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJM
+AEQRJgCiTHr2YsTSUv9LX11dbW83Njba2/X19fZ2xGw2a2//+uuvoWePnII4Pz9v7ebzefuZ3fMR
+VWPnVKrGXlvdMxA//fRT+5k///xze1tV9eOPP7a3z58/b2+3trba25G/OyOneh4a75gAiCJMAEQR
+JgCiCBMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAlEnPXox8DPzIx8+P
+nJ/Y2dlpb0dOKtze3ra3Iz/nxcXF9nZ03z2ZcX193X7m8vJye/v06dP2tqrqxYsX7e0PP/zQ2u3v
+77efOXJ6omrs57W5udnerqystLdOV3wd3jEBEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIow
+ARBFmACIIkwARBEmAKIIEwBRhAmAKI/u7u7upv4iOka+7JETEldXV+3t5eVle3t2dtbezmaz9vb4
++Li9HX32xcVFazfy+x05ezFyiqGq6smTJ+3t9vZ2a/f48eP2M0fOx1SN/axHz7F0OXvxdXjHBEAU
+YQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKLc27MXUxn5
+cU21HTkDMfrymPLZX9vCwtj/80ZOKnSfPfI1T3kCwvmJ/2/eMQEQRZgAiCJMAEQRJgCiCBMAUYQJ
+gCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAozl4AEMU7JgCiCBMAUYQJgCjCBEAUYQIg
+ijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIE
+QBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgyn8AAEvXtOK5f6cAAAAASUVORK5C
+YII=
+" transform="translate(1909, 40)"></image>
+</g>
+<path clip-path="url(#clip810)" d="
+M116.325 987.675 L523.423 987.675 L523.423 580.577 L116.325 580.577  Z
+  " fill="#ffffff" fill-rule="evenodd" fill-opacity="1"></path>
+<defs>
+  <clippath id="clip816">
+    <rect x="116" y="580" width="408" height="408"></rect>
+  </clippath>
+</defs>
+<polyline clip-path="url(#clip810)" style="stroke:#000000; stroke-width:4; stroke-opacity:1; fill:none" points="
+  116.325,987.675 523.423,987.675 
+  "></polyline>
+<polyline clip-path="url(#clip810)" style="stroke:#000000; stroke-width:4; stroke-opacity:1; fill:none" points="
+  116.325,580.577 116.325,987.675 
+  "></polyline>
+<g clip-path="url(#clip816)">
+<image width="422" height="422" xlink:href="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAAaYAAAGmCAYAAAA3cSADAAANFElEQVR4nO3dS1NdZROG4eYQNhCS
+aGK0LK1y5v//O2o5SXmKQCQhJATY8I2s+obancp6tlzXvOtd+8TNmqzeuru7uysACLG99AUAwP8T
+JgCiCBMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACI
+IkwARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijAB
+EEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQJTd
+pS8A/ivu7u6WvoR7Y/Jeb21tfcQryT93E7ljAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAU
+YQIgijABEEWYAIgiTABEESYAoggTAFGsvdgQS61UmJ47mbdG4p+7vb39pHPT2en85Luxvd3/f3xn
+Z2fjZievdymbd8UA/KcJEwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAU
+YQIgijABEMXai39p8rj9pVYMrNfr9uz19XV7dnr2ZLZrsiJgul5g8t26urpqzV1eXrbPnMxWzb7T
+k/d6b2+vPbtardqz+/v77dnDw8P27OT1bm1ttWcn3DEBEEWYAIgiTABEESYAoggTAFGECYAowgRA
+FGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKPdy7cVSqytubm7as5P1E5P1BO/evWvPVlW9f/++
+Pdt9vyaP6p+sCJisNaiaXXf3czo7O2ufeX5+3p6tmq01mayfePjwYXv20aNH7dmJyffywYMH7Vlr
+LwCghAmAMMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijABEEWYAIhi7cW/
+tNTai8nqijdv3rRnJ2sRqmarEbrv1+5u/2t9dHTUnp18N6qqdnZ22rMXFxetuVevXrXPPD09bc9W
+zd6vyfqJySqH6WqTrqXWTyzFHRMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAo
+wgRAFGECIIowARBFmACIsrFrLyarK5Zae7Fer9uzk7UXk9UTx8fH7dmqqtevX7dnu+/XwcFB+8zt
+7f7/apNzp2dfXV215iafz8nJSXu2arbKYbIi5LPPPmvPTlaq7O3ttWcnr3cTuWMCIIowARBFmACI
+IkwARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUTZ27cVSJiszbm5u2rPv
+379vz56dnbVnp6sN/vrrr/Zsdy3C06dP22dOTNYaVM3WXnz48KE1N/l8Tk9P27NVVfv7++3ZyWc8
++Zwm17xardqzk3Ubk/UiS3HHBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIow
+ARBFmACIIkwARBEmAKIIEwBR7uU+pslOpdvb2/bs9fV1e/bi4qI9++rVq/bsy5cv27NVVefn5+3Z
+o6Oj1txkd82jR4/asw8fPmzPVvV3KlVVvXv3rjV3fHzcPnOyy6mq6tmzZ+3ZyU6lyec0mZ1c82Sn
+kn1MADAkTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQJR7
+ufZiYr1et2cnaw3evHnTnv3zzz8Xma2arfp4/Phxa+7zzz9vn/n06dP27P7+fnu2qurt27ft2ZOT
+k9bcZK3JZBVLVdXz58/bs0utrlitVu3Z7e3+fcAmrq6YcMcEQBRhAiCKMAEQRZgAiCJMAEQRJgCi
+CBMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEuZdPF7+7u2vPTp4uPnkac/fp0VVVv/32W3t2+nTx
+o6OjTz775MmT9pm7u/2fxOXlZXu2qur09LQ9++LFi9bc5Onie3t77dmqqoODg/bs5Anhk+uePCF8
+YvI3axOfTO6OCYAowgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgA
+iCJMAESx9uJfur6+bs++efOmPTtZT/D777+3Z8/OztqzVVWr1ao92/2cJutF/vjjj/bs+/fv27NV
+VT/88EN79scff2zNHR8ft8/8+uuv27NVsxUjE5PVNTc3N+3ZyeudrK7YxJUZ7pgAiCJMAEQRJgCi
+CBMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAlHu59uL29rY9++HDh/bs
+ZIXEyclJe/bVq1ft2fPz8/ZsVdX+/n579sWLF625d+/etc+crCZ4+/Zte7aq6ueff27P/vTTT625
+yaqOL774oj1bVXV1ddWenVz35eVle3by+9/Z2VlkdhO5YwIgijABEEWYAIgiTABEESYAoggTAFGE
+CYAowgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKBu7j+nu7m6R2ckOmcnsZIfU9vZy/3+8
+fv26PdvdMdTd4zR1cXExmn/58mV79vT0tDW3Wq3aZ053BG1tbbVnJ7/h9Xq9yOxSf7M2kTsmAKII
+EwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijABEGVj115MHpk/
+mZ086v/w8LA9++WXX7ZnJ+sYnjx50p6tqrq5uWnPTj6nruvr6/bsZK1J1ey92tvba809e/asfebk
+O1lV9fz58/bs48eP27MHBwft2e77XFW1u9v/c7vEb2FJ7pgAiCJMAEQRJgCiCBMAUYQJgCjCBEAU
+YQIgijABEEWYAIgiTABEESYAoggTAFGECYAoG/t08YmlnhD+1VdftWcnlnoyedXsad23t7ef/MzX
+r1+3Z3/55Zf2bNXs6dPr9bo1980337TP/P7779uzVVXfffdde3bynV7qyeSTz3d7u38PsYlPJnfH
+BEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKJs7NqL
+yaPcJ4+QX2rtxaNHj9qzV1dX7dnuOoWPMd+97vPz8/aZv/76a3v27u6uPVtV9eDBg/Zs9/fw7bff
+ts+crK2oqnr+/Hl7dqnVFZPPaLJuZxNXV0y4YwIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRA
+FGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKBu7j2liso9ptVq1Zyf7WB4+fNievb29XWS2qurm
+5qY9e3Fx0Zqb7EWa7OqZ7Aia6u4JmuxEevLkSXu2arm9SJPf/2Qv0lKzm8gdEwBRhAmAKMIEQBRh
+AiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijABEEWYAIhyL9deTExWV0wetz9Z5TBZ
+XbFer9uzVctc9/X1dfvMicPDw9H85Puxt7fXmjs6OvrkZ/5t8nr5b/PNACCKMAEQRZgAiCJMAEQR
+JgCiCBMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFHu5dqLra2tpS/hk5q83snKjKqq
+q6ur9uzl5eUnP3PyXh0cHLRnq6p2d/s/x+4Kisk1T673PpqsgJnYxL937pgAiCJMAEQRJgCiCBMA
+UYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFM+tvwcmqyvW6/Xo7MkKiuvr
+69bcZL1Ad33E9Nzp2Q8ePPjkZ+7s7LRnpybv9VKz/HPumACIIkwARBEmAKIIEwBRhAmAKMIEQBRh
+AiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUay82xFKP6p+szJja3u7937RarT7ylfwz3dUT
+f5u817u7vZ/ywcFB+8zJyoyq2dqMra2tjZudWOrcpbhjAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJ
+gCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGsvdgQSz2qv7tO4W/7+/vt2e4aiMnai5ubm0Vm
+q2brSborJCarKyafbdVs5cbkM558p7urWKru3+qKCXdMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijAB
+EEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIMrW3eRZ+3wyk49pMttdPfEx5rvXPTlziev9GLrr
+GCZrHCazVf1VHVXLrYGxuuLTcMcEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIg
+ijABEEWYAIgiTABEESYAolh7AUAUd0wARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQR
+JgCiCBMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACI
+IkwARBEmAKIIEwBRhAmAKMIEQJT/ARTff0Aed1IrAAAAAElFTkSuQmCC
+" transform="translate(109, 573)"></image>
+</g>
+<path clip-path="url(#clip810)" d="
+M716.325 987.675 L1123.42 987.675 L1123.42 580.577 L716.325 580.577  Z
+  " fill="#ffffff" fill-rule="evenodd" fill-opacity="1"></path>
+<defs>
+  <clippath id="clip817">
+    <rect x="716" y="580" width="408" height="408"></rect>
+  </clippath>
+</defs>
+<polyline clip-path="url(#clip810)" style="stroke:#000000; stroke-width:4; stroke-opacity:1; fill:none" points="
+  716.325,987.675 1123.42,987.675 
+  "></polyline>
+<polyline clip-path="url(#clip810)" style="stroke:#000000; stroke-width:4; stroke-opacity:1; fill:none" points="
+  716.325,580.577 716.325,987.675 
+  "></polyline>
+<g clip-path="url(#clip817)">
+<image width="422" height="422" xlink:href="data:image/png;base64,
+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
+JgCiCBMAUYQJgCjCBEAUYQIgijABEOXVnr3Y2dlpbydfP398fNzefv78ub29ublpb+/u7hZ53Kqq
+Hz9+tLf39/et3eR0xcRqtRrtJ++t7hmIP//8s/2YX758aW+rZr8Pk3Mdk/Mz+/v77e3k787k791r
+5BMTAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgAiPJq
+z15MTL5+/uDgoL398OFDe/v333+3t3t7/Zd5ciKgqurr16/t7eXlZWv369ev9mMudRKlqurTp0/t
+bfcExV9//dV+zMnJjKrlTldMfoedrngZPjEBEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIow
+ARBFmACIIkwARBEmAKIIEwBRhAmAKDvb7Xa79JN4TSY/rqenp/b24eGhvb29vW1vr6+v29uqqp8/
+f7a33ee9Xq/bj7nk2Yuzs7P29vz8vLWbnI84Ojpqb6uq9vf329vVatXeTl7jCWcv/vd8YgIgijAB
+EEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRnL14QZMf9WT7
+/Pzc3m42m/Z2+tiT7RImpxiqZucYutvJKYbpGYclH5tsPjEBEEWYAIgiTABEESYAoggTAFGECYAo
+wgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKM5e8P/K2+tlOAPBv4lPTABEESYAoggTAFGE
+CYAowgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQBRhAiDK3tJPgH835xiA3+UTEwBR
+hAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijABEEWYAIjyX57rkpKj
+isgtAAAAAElFTkSuQmCC
+" transform="translate(709, 573)"></image>
+</g>
+<path clip-path="url(#clip810)" d="
+M1316.33 987.675 L1723.42 987.675 L1723.42 580.577 L1316.33 580.577  Z
+  " fill="#ffffff" fill-rule="evenodd" fill-opacity="1"></path>
+<defs>
+  <clippath id="clip818">
+    <rect x="1316" y="580" width="408" height="408"></rect>
+  </clippath>
+</defs>
+<polyline clip-path="url(#clip810)" style="stroke:#000000; stroke-width:4; stroke-opacity:1; fill:none" points="
+  1316.33,987.675 1723.42,987.675 
+  "></polyline>
+<polyline clip-path="url(#clip810)" style="stroke:#000000; stroke-width:4; stroke-opacity:1; fill:none" points="
+  1316.33,580.577 1316.33,987.675 
+  "></polyline>
+<g clip-path="url(#clip818)">
+<image width="422" height="422" xlink:href="data:image/png;base64,
+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
+" transform="translate(1309, 573)"></image>
+</g>
+<path clip-path="url(#clip810)" d="
+M1916.33 987.675 L2323.42 987.675 L2323.42 580.577 L1916.33 580.577  Z
+  " fill="#ffffff" fill-rule="evenodd" fill-opacity="1"></path>
+<defs>
+  <clippath id="clip819">
+    <rect x="1916" y="580" width="408" height="408"></rect>
+  </clippath>
+</defs>
+<polyline clip-path="url(#clip810)" style="stroke:#000000; stroke-width:4; stroke-opacity:1; fill:none" points="
+  1916.33,987.675 2323.42,987.675 
+  "></polyline>
+<polyline clip-path="url(#clip810)" style="stroke:#000000; stroke-width:4; stroke-opacity:1; fill:none" points="
+  1916.33,580.577 1916.33,987.675 
+  "></polyline>
+<g clip-path="url(#clip819)">
+<image width="422" height="422" xlink:href="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAAaYAAAGmCAYAAAA3cSADAAANAElEQVR4nO3dS1NWB5eG4QXKSdAY
+CcFUjuP8//+SSmWQaKWMQY0ChvOhR13Vk65Kr/W1+yFc1/ypjQjevpO9Vm5vb28LAEKsLv0FAMD/
+JEwARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijAB
+EEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQBRh
+AiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAo
+wgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMA
+UYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwARBEm
+AKI8XPoLuE9ub2/v1XOXMvnzrqys/Ae/knxL/nnv2/eaf84nJgCiCBMAUYQJgCjCBEAUYQIgijAB
+EEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARDlXp69mJxFuLm5aW+vr68X2V5eXra3V1dX
+7e302d3v9eTv6K6eCOmekFhd7f/fdG1trb2d7tfX19vbBw8eLLKdfK/v24kQn5gAiCJMAEQRJgCi
+CBMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAlEXPXix1fmJyyuHs7Ky9
+/fjxY3t7fHzc3h4eHi6yrZp93ScnJ63d+fl5+5mTMx2T0yTTffd36eHD/j8BOzs77W1V1e7ubnu7
+v7+/yPbp06ft7dbWVns7ORFyF09m+MQEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAU
+YQIgijABEEWYAIgiTABEESYAoix69mJyuuLi4qK9PT09bW8/fPjQ3r59+7a9/eOPP9rbV69eLfLc
+qqo3b960t92TG5O/3yXPXkx+H5Y4ezE5AVFV9f3337e3P/74Y3s7Obcz+X5NTldMnuvsBQAMCRMA
+UYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBlfPZi8gr5yWv+
+r66u2tuzs7P29uPHj+3t+/fv29uDg4P2dqmTGVVVf/31V3vbPV9xF88aVM1+H7rfq5OTk/Yzz8/P
+29uqqo2Njfb2+fPn7e3ff//d3k7+3Zn8XN43PjEBEEWYAIgiTABEESYAoggTAFGECYAowgRAFGEC
+IIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQJTxPab7ZnW13/IHDx60t5PbNdvb2+3t7u5ue1tV
+tbOz0952byNNnjn5Xk3vMU3uG71+/bq1e/nyZfuZk7tGVcvdJ5rc3Jr8Dk+2Kysr7e1d5BMTAFGE
+CYAowgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgAiLLo2YvJq9wn
+r65fX19vbydnEZ4+fdreXl1dtbeT1+0/e/asva2a/T199tlnrd3ka578/U5OolRVHR4etrc//fRT
+a3d0dNR+5uXlZXtbVbW1tdXeTk6bTLabm5vt7eT38L7xiQmAKMIEQBRhAiCKMAEQRZgAiCJMAEQR
+JgCiCBMAUYQJgCjCBEAUYQIgijABEEWYAIgyfrv45A3hk7cxT97UO3lD8PX19SLb29vb9nZtba29
+vbm5aW+rZm/r7r4lfPIW98mb56dv2578LnWdn5+3t9O3ZXffHl9Vtbu7u8hzJ/92TP69W+JnY0k+
+MQEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAo47MX
+E5NXuU9euf/wYf+PvbGx0d5Ozl5Mzk9MvubJq/qrqnZ2dtrb7nmCyWmCyc/k8fFxe1tV9fHjx/b2
+9evXrd3R0VH7mZOTJlVVX3zxRXu7t7fX3k6+7sm/HZOfrcnZm7t4MsMnJgCiCBMAUYQJgCjCBEAU
+YQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARDlzp69WOpkxtraWns7OccwMXnu
+5DX/02evr6+3dpOfjaurq/Z2evbit99+a29fvHjR2p2dnbWf+fz58/a2qurLL79sb7snUar6P1dV
+Tld8Kj4xARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJ
+gCjCBECURe8xTUzuk6yu9ns8uU90c3PT3k4seQdmcvvq+vq6tbu8vGw/8+TkpL19+fJle1tV9fPP
+P7e3b968ae0mP8+Te0pVVXt7e+3to0eP2tvJ7//kd4l/zicmAKIIEwBRhAmAKMIEQBRhAiCKMAEQ
+RZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijABEOXOnr2YWOpkxtra2iLPnZzbmJ7qWOLZ5+fn
+7Wd2z0dUVf3yyy/tbVXVixcv2tuLi4vW7ttvv20/87vvvmtvq6p2d3fb262trfZ2cupj8nvIP+e7
+DEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwARLmzbxefvCF8
+Yqm3C0/+vJM3fF9fX7e3U1dXV63d6elp+5mvXr1qb3/99df2tqrq6OiovX3y5Elr98MPP7Sf+c03
+37S3Vffv7eJL/Zt1F/nEBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBF
+mACIIkwARBEmAKLc2bMXS1nqtfeT507OXiz5qv7u1314eNh+5u+//97evnv3rr2tmp1j+Prrr1u7
+ydmL/f399raq6vHjx+3t+vp6e3sXz17ct5MZPjEBEEWYAIgiTABEESYAoggTAFGECYAowgRAFGEC
+IIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQJR7eY9pctvk9vZ2kedOTG7ITP68VbNbUCcnJ63d
+wcFB+5lv3rxpby8uLtrbqqrd3d32tntXqXvHqarq888/b2+rqjY2NtpbN5X+3XxiAiCKMAEQRZgA
+iCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFHu5dmLibv46vrJ6Ynr
+6+vRs7unK6qq3r5929r9+eef7WceHx+3t5ubm+1tVdXe3l57+9VXX7V2k9MVW1tb7W1V1draWnu7
+1OkKPg2fmACIIkwARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjC
+BEAUZy8+odvb2/Z2qdMVk7MVVVUfPnxobw8ODlq79+/ft5858ezZs9F+f3+/ve2er9je3m4/c3K2
+oupunq5wMuPT8IkJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBF
+mACIIkwARHH24v9ocrpisp2crjg9PW1vj46O2tuqqnfv3rW33ZMZl5eX7WdubW21t48ePWpvq/qn
+K6qqHj9+3Nqtr6+3n/ngwYP2tsoJCf53PjEBEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIow
+ARBFmACIIkwARBEmAKIIEwBRhAmAKPfy7MVdPF1xcXHR3k7OXhwfH7e3VbOzGWdnZ63d5BzDzs5O
+e/vkyZP2tqp/uqKqf67j4cP+PwGrq/5fy/8PP1kARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgA
+iCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgyr08ezFxF89edM9HTLdVVZeXl+1t93zF9vZ2+5mTMxDT
+sxeTkxvr6+ut3eTPu7Ky0t7+J/b8e/nEBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRA
+FGECIIowARBFmACIIkwARBEmAKI4e3EPTE51dE9P/LdHjx61tzc3N63d5LzI2tpaezs5t1FV9fjx
+4/Z2a2urtZv8eVdXl/t/rZMZ/24+MQEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijABEEWY
+AIgiTABEESYAoggTAFGECYAoK7eTmwj30OTbNTnHcHFx0d6enp62t2dnZ+3t9Nnn5+etXfdcRtXs
+lMPkhERV/3RFVdXm5uYn3VXN/7wPH/av7kzPsXQ5t/Fp+MQEQBRhAiCKMAEQRZgAiCJMAEQRJgCi
+CBMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAojh7cUcs9dc0fe5k393e1e/V5KRCd7vEMxOe
+TTafmACIIkwARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBECU
+/wLrMTFZj2pl3gAAAABJRU5ErkJggg==
+" transform="translate(1909, 573)"></image>
+</g>
+<path clip-path="url(#clip810)" d="
+M116.325 1521.01 L523.423 1521.01 L523.423 1113.91 L116.325 1113.91  Z
+  " fill="#ffffff" fill-rule="evenodd" fill-opacity="1"></path>
+<defs>
+  <clippath id="clip8110">
+    <rect x="116" y="1113" width="408" height="408"></rect>
+  </clippath>
+</defs>
+<polyline clip-path="url(#clip810)" style="stroke:#000000; stroke-width:4; stroke-opacity:1; fill:none" points="
+  116.325,1521.01 523.423,1521.01 
+  "></polyline>
+<polyline clip-path="url(#clip810)" style="stroke:#000000; stroke-width:4; stroke-opacity:1; fill:none" points="
+  116.325,1113.91 116.325,1521.01 
+  "></polyline>
+<g clip-path="url(#clip8110)">
+<image width="422" height="422" xlink:href="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAAaYAAAGmCAYAAAA3cSADAAANqUlEQVR4nO3d21JU5xaG4QEt+0bc
+oERQU9nc/x0llTKKYkUUEWXf6yhV63Bl/LXsj/TznH81AZG3+mSOpdlsNisACLE87y8AAP6bMAEQ
+RZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGEC
+IIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjC
+BEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKLcm/cX
+AP8Ws9ls3l/CnbK0tDTvL4FQPjEBEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACI
+IkwARBEmAKIIEwBRhAmAKM5eLICRcwyjpxxub2/b25ubm9bu8vKy/czz8/P29uLior2tGvu6u+7d
+6/8JWFtbG3r26urqXLYrKyvt7WQyaW+Xl+fzOeAunhfxiQmAKMIEQBRhAiCKMAEQRZgAiCJMAEQR
+JgCiCBMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEcfbiO5rX+Ynu+Yiq8VMOZ2dn7e2HDx9au7dv
+37af+fr16/b23bt37W1V1cnJSXt7fX3d2m1ubrafube3195WVR0cHLS3+/v77e3u7m57u7Oz096u
+r6+3t/M61TGvkxk+MQEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYA
+oggTAFGECYAozl78QyPnJ25vb9vbq6ur9vbr16/t7cePH9vbqrETFL/99tt33VVV/fnnn+1t90zH
+387Pz9vb7nmCkbMXT548aW+rxn5ep6en7e3Iz7l7XqSq6sGDB+3t1tZWeztyumJ5uf/ZZei57SUA
+/B8IEwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijABEGUhz16M
+nK4Y2Y68Mn/kdMXx8XF7++bNm/a2qur3339vb7vnKw4PD9vP/PbtW3u7vb3d3lZVPXr0qL1dWVlp
+7UbOGoxsq6q+fPnS3o6czJhOp+3txsZGe7u6ujqXbfd3Y558YgIgijABEEWYAIgiTABEESYAoggT
+AFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRFvLsxYibm5v29vLysr0dOXvx6dOn9vb9
++/ftbVXV0dFRe9s9izByImB3d7e93dvba2+rqu7fv9/eLi0ttXZnZ2ftZ378+LG9raq6urpqb0f+
+L42cNhnZjnzNI393bm9v29vJZNLejvCJCYAowgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmA
+KMIEQBRhAiCKMAEQRZgAiCJMAERZyLMXs9lsLtvr6+v2duSV+SOnDU5PT9vbqqrz8/P29t693q/n
+yPmJly9ftrfPnz9vb6uqptNpe9v9N3779u13f+bfRs5ezOsMxIjuaZJ5bufFJyYAoggTAFGECYAo
+wgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgAiLKQ95hGzOuW08j9
+mbt4u6aqamVlpbXb3t5uP/Phw4ft7c7OTntbNXY35+LiorU7OTlpP3NkO2ptba293dramst2Y2Oj
+ve3eJqtyjwkAhgkTAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQBRhAiCK
+MAEQxdmL72jk9fOTyaS9HXll/si2auzr7p4JOT8/bz/z9PS0vf3rr7/a26r+6YqqqlevXn3XXdXY
+11tV9fTp0/Z2d3d3Ls8dOYuyubnZ3nZPwFRVLS/fvc8fd+8rBuBfTZgAiCJMAEQRJgCiCBMAUYQJ
+gCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFEW8u3iI2/5HnlT78ibutfW1trbra2t9nY6nba3
+VVUbGxvt7efPn1u7kbd8j7wx+/DwsL2tqvr06VN7e3R01NpdX1+3n/nDDz+0t1VVz58/b29fvnzZ
+3u7t7bW3Ozs77e36+np7O/KW/pG/dyPbET4xARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQBRhAiCK
+MAEQRZgAiCJMAEQRJgCiCBMAUYQJgCgLefZixMjZi5WVlfZ25HzE/fv329vHjx+3t1Vjpxzev3/f
+2r179679zD/++KO9nc1m7W1V1dnZWXvbPYvw008/tZ/5888/t7dVVb/++mt7e3Bw0N4+ePCgvR05
+XTFy9mbk785dtFjfLQDxhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIg
+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
+f6tokHOljo8AAAAASUVORK5CYII=
+" transform="translate(109, 1106)"></image>
+</g>
+<path clip-path="url(#clip810)" d="
+M716.325 1521.01 L1123.42 1521.01 L1123.42 1113.91 L716.325 1113.91  Z
+  " fill="#ffffff" fill-rule="evenodd" fill-opacity="1"></path>
+<defs>
+  <clippath id="clip8111">
+    <rect x="716" y="1113" width="408" height="408"></rect>
+  </clippath>
+</defs>
+<polyline clip-path="url(#clip810)" style="stroke:#000000; stroke-width:4; stroke-opacity:1; fill:none" points="
+  716.325,1521.01 1123.42,1521.01 
+  "></polyline>
+<polyline clip-path="url(#clip810)" style="stroke:#000000; stroke-width:4; stroke-opacity:1; fill:none" points="
+  716.325,1113.91 716.325,1521.01 
+  "></polyline>
+<g clip-path="url(#clip8111)">
+<image width="422" height="422" xlink:href="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAAaYAAAGmCAYAAAA3cSADAAANLElEQVR4nO3dXW/UZbvG4avvL0Bt
+q5XQSkLijsHE+P2/hoYoGgOGoFAqlLb2dTpr60nW1gpc95PO2dXj2D/zH+iUH7Mz19x0Op0WAISY
+n/ULAID/TZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAo
+wgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMA
+UYQJgCjCBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwARBEm
+AKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijABEEWYAIgi
+TABEESYAoizO+gVAkul0OuuX0DI3NzfrlwD/NT4xARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQBRh
+AiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjOXvB/Gj0DMbK/vr5u7SaTyY0/c3Q7qnv2Yn6+/3/T
+hYWF9nb02SNnPma15dP5xARAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQ
+RZgAiCJMAEQRJgCiOHtxS8zifERV1eXlZXtbVXV2dtbeHh4etnb7+/vtZ/7111/t7du3b9vbqqqT
+k5P2dmlpqbXb3t5uP/PRo0ft7eh+5HXfu3evvV1eXm5vndv4dD4xARBFmACIIkwARBEmAKIIEwBR
+hAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjOXtygkfMTk8mkvZ3F6Yn/eP36dXv7
+/Pnz1u7Zs2ftZ/7+++/t7Zs3b9rbqqqLi4v2dn19vbV7/Phx+5nfffdde1tV9fTp0/b222+/bW8f
+PnzY3j548KC97Z4mqXL2AgBmSpgAiCJMAEQRJgCiCBMAUYQJgCjCBEAUYQIgijABEEWYAIgiTABE
+ESYAoggTAFGECYAozl58pul02t6OnK44PT1tbw8ODtrbly9ftrdVVT/99FN7+/PPP7d2r169aj/z
+/Py8vR05iVBVtbKy0t4uLCy0diPv55H3VVXV27dv29utra329v79++3t6upqe7u42P/nduTndBtP
+ZvjEBEAUYQIgijABEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKLc
+ybMXszpdMXJS4cOHD+3tyBmIZ8+etbej++5Zha+//rr9zCdPnrS3e3t77W1V1dLSUnv7zz//tHYj
+pydGfheqqo6Pj9vbk5OT9vbi4qK9Hfkzj/y7c9f4xARAFGECIIowARBFmACIIkwARBEmAKIIEwBR
+hAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUdxj+kxXV1ft7b///tvedu/tVFW9fPmyvX3x
+4kV7WzV2c2d3d7e1++GHH9rPfPr0aXu7vb3d3lZVHR0dtbfPnz9v7d69e9d+5sjrHd2P3Da7vr5u
+b7kZPjEBEEWYAIgiTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmA
+KLf27MXI6YqRr72/vLxsb0fOXhwcHLS3f//9d3t7eHjY3lZVbWxstLfff/99a/fjjz+2n9k9tVFV
+NZlM2tuqqvfv39/4duS9MfJ+rhp7b4z8/i8sLLS38/P9/8vPzc21t3eNT0wARBEmAKIIEwBRhAmA
+KMIEQBRhAiCKMAEQRZgAiCJMAEQRJgCiCBMAUYQJgCjCBECUW/vt4iNGvl386uqqvT0/P29vj46O
+ZrIdtbOz097u7e21dvfv328/8/T0tL0d+Qb4qqrffvutvf3ll19auz///LP9zJWVlfa2qmppaam9
+HfkZr66utrcj30w+4q59M7lPTABEESYAoggTAFGECYAowgRAFGECIIowARBFmACIIkwARBEmAKII
+EwBRhAmAKMIEQBRhAiDKnTx7MWJWJzMuLy/b25HXPHKaoKpqeXm5vT07O2vtXr161X7myNmL169f
+t7dV/dMVVVW//vpra7e/v99+5pMnT9rbqqrt7e32dmtrq70dOXuxuNj/J/Ouna4Y4RMTAFGECYAo
+wgRAFGECIIowARBFmACIIkwARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgAiOLsxWca+er6ke3I
++YmVlZX2duRr/quqjo+P29s//vijtZuf7/9/6+TkpL09ODhob6vGznW8e/eutRs5iTJytqKqand3
+t73d3Nxsb0d+H0beW85efDqfmACIIkwARBEmAKIIEwBRhAmAKMIEQBRhAiCKMAEQRZgAiCJMAEQR
+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
+AElFTkSuQmCC
+" transform="translate(709, 1106)"></image>
+</g>
+</svg>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Machine-Learning-using-KNN">
+<a class="anchor" href="#Machine-Learning-using-KNN" aria-hidden="true"><span class="octicon octicon-link"></span></a>Machine Learning using KNN<a class="anchor-link" href="#Machine-Learning-using-KNN"> </a>
+</h2>
+<p>KNN stands for K Nearest Neighbour. The model belongs to a family of supervised machine learning (ML) algorithms and can be used for both classification and regression problems. However, the present context of MNIST dataset, we are going to use it as a classifier. The KNN ML algorithm works on a simple concept of <em>similarity</em> between two sets (reference set and test set). The similarity can be <strong>pixel</strong> based or <strong>feature</strong> based. In this tutorial, we will take a simpler case of <strong>pixel similarity</strong>. For our current problem of MNIST data classification, we make the following design choices</p>
+<ol>
+<li>We use K=1</li>
+<li>We use images to represent our sets. Images from training data will form our reference set and images from test data will form our test set. </li>
+</ol>
+<p>The algorithm is implemented as follows</p>
+<h3 id="Training">
+<a class="anchor" href="#Training" aria-hidden="true"><span class="octicon octicon-link"></span></a>Training<a class="anchor-link" href="#Training"> </a>
+</h3>
+<ul>
+<li>For each class (0,1,2,3,...9), we compute a mean image by taking an average of all train images in that class </li>
+<li>This will result in 10 mean images. </li>
+<li>Taken together these 10 mean images makeup our model</li>
+</ul>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Training</span>
+<span class="n">mean_stk</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># mean per class in horizontal-major form</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">cats</span>
+    <span class="k">global</span> <span class="n">mean_stk</span>
+    <span class="n">mn_img</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">xtrain</span><span class="p">[:,:,(</span><span class="n">ytrain</span> <span class="o">.==</span> <span class="n">i</span><span class="p">)],</span> <span class="n">dims</span><span class="o">=</span><span class="mi">3</span><span class="p">);</span>
+    <span class="n">push</span><span class="o">!(</span>mean_stk, mn_img<span class="o">[</span>:,:,1<span class="o">])</span> # stacking of Arrays
+<span class="n">end</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Testing">
+<a class="anchor" href="#Testing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Testing<a class="anchor-link" href="#Testing"> </a>
+</h3>
+<p>To predict a class label (0,1,2...9) of a given test image, we use <strong>pixel similarity</strong>. We can use different metrics for similarity but a simpler one is a <em>distance metric</em>. There are two commonly used options for distance metric:</p>
+<ul>
+<li>L1 Norm: Mean absolute difference between pixel values</li>
+<li>
+<p>L2 Norm: Mean of squared differences followed by square root (also called as RMSE)</p>
+<p>Let's take a single example image of <code>digit 0</code> from test data and apply these distance metric</p>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">im_0</span> <span class="o">=</span> <span class="n">xtest</span><span class="p">[:,:,</span><span class="n">findfirst</span><span class="p">(</span><span class="n">isequal</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="n">ytest</span><span class="p">)];</span>
+<span class="n">Gray</span><span class="o">.</span><span class="p">(</span><span class="mi">1</span> <span class="o">.-</span> <span class="n">MNIST</span><span class="o">.</span><span class="n">convert2image</span><span class="p">(</span><span class="n">im_0</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]))</span> <span class="c1">#display image</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea output_execute_result">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHAAAABwCAAAAADji6uXAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAIGSURBVGje7do9a1RBFIfxX3wBEcFCRWzcgJVpLLSxULCxCGLjF7BRDFoJ2gaF2BsRiYVYKCg2wgpaBZJOLewkYmMqi7VNmY3FvcsOy/W+ICSTYU6zs8PZ+5w/h5l75sxObdle27PNvAzMwAzMwAzMwBa2r+sPNnAPSziLd+jFrDB94FTXmuYnZsrxEIu4HbPC9IGd1uEA13ebwvSBrXO4iPf4MjG/qliPZ3AxRoXpA1vvpXsrohsGcz28Vbwjo1KYPrBVDmfxsSK6IziE9WBuMzaF6QMb99IV/CgjC6O7hcs4jGUslPPPMBeTwvSBtevwF87jj/G+2cM1zONg6bde+g1wAA9xB/tjUJg+sDaHk+eIS3iDoxW+T3DXONdrOBWDwvSBrevSc3ihOn9wFa/xNTaF6QMbczgsPz83+G2VviP/ebyKQWH6wNocLnWIqI9vxrXPg1gUpg+szWG/xQMG+I5Hwdwx1fXMjihMH9i55z1pC3gafJ/GS5yMRWH6wP/K4azi7BjaaVyISWH6wNocjuoUij4N3MDvchz22kb2ITaF6QNrcziH++X4ShBdGOVk7yY6hekDa8/4Yf+las0NcVyxfz7HCePeTTQK0wc29rxXFXdOj1XnMN8B7ziw9d3TJ8Va6yt6MjcV78sZ/65Bo1CYPrDzfzF2ncIMzMAMzMAMzMBm+wsz8FMUm7NFWQAAAABJRU5ErkJggg==">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can either implement <code>L1</code> and <code>L2</code> norm or use the existing functions from <code>Flux</code> or <code>Images</code> package. Both will give us the same answer</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Our Implementation</span>
+
+<span class="n">l1_dist_0</span> <span class="o">=</span> <span class="nb">abs</span><span class="o">.</span><span class="p">(</span><span class="n">im_0</span> <span class="o">-</span> <span class="n">mean_stk</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">l1_dist_0</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">l1_dist_0</span><span class="p">[:])</span>
+
+<span class="n">l2_dist_0</span> <span class="o">=</span> <span class="p">(</span><span class="nb">abs</span><span class="o">.</span><span class="p">(</span><span class="n">im_0</span> <span class="o">-</span> <span class="n">mean_stk</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">.^</span><span class="mi">2</span>
+<span class="n">l2_dist_0</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">l2_dist_0</span><span class="p">[:]))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"L1: $l1_dist_0, L2: $l2_dist_0  (Our Implementation)"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>L1: 0.1284025, L2: 0.21966754  (Our Implementation)</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Using existing functions from Flux and Images Packages</span>
+
+<span class="n">flux_l1_dist_0</span> <span class="o">=</span> <span class="n">Flux</span><span class="o">.</span><span class="n">Losses</span><span class="o">.</span><span class="n">mae</span><span class="p">(</span><span class="n">im_0</span><span class="p">,</span> <span class="n">mean_stk</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">flux_l2_dist_0</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">Flux</span><span class="o">.</span><span class="n">Losses</span><span class="o">.</span><span class="n">mse</span><span class="p">(</span><span class="n">im_0</span><span class="p">,</span> <span class="n">mean_stk</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="n">println</span><span class="p">(</span><span class="s2">"L1: $flux_l1_dist_0, L2: $flux_l2_dist_0    (Flux Package)"</span><span class="p">)</span>
+
+<span class="n">images_l1_dist_0</span> <span class="o">=</span> <span class="n">Images</span><span class="o">.</span><span class="n">mae</span><span class="p">(</span><span class="n">im_0</span><span class="p">,</span> <span class="n">mean_stk</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">images_l2_dist_0</span> <span class="o">=</span> <span class="n">Images</span><span class="o">.</span><span class="n">mse</span><span class="p">(</span><span class="n">im_0</span><span class="p">,</span> <span class="n">mean_stk</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">println</span><span class="p">(</span><span class="s2">"L1: $images_l1_dist_0, L2: $l2_dist_0    (Images Package)"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>L1: 0.1284025, L2: 0.21966754    (Flux Package)
+L1: 0.1284025, L2: 0.21966754    (Images Package)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's apply the metric on complete test data</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">total_test_ims</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">xtest</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">total_cats</span> <span class="o">=</span> <span class="n">length</span><span class="p">(</span><span class="n">cats</span><span class="p">)</span>
+
+<span class="n">per_image_score_L1</span>  <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">Int64</span><span class="p">,</span> <span class="n">total_test_ims</span><span class="p">)</span>
+<span class="n">per_image_score_L2</span>  <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">Int64</span><span class="p">,</span> <span class="n">total_test_ims</span><span class="p">)</span>
+<span class="n">per_digit_score_l1</span>  <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">Int64</span><span class="p">,</span> <span class="n">total_cats</span><span class="p">)</span>
+<span class="n">per_digit_score_l2</span>  <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">Int64</span><span class="p">,</span> <span class="n">total_cats</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">total_test_ims</span>
+
+    <span class="n">per_cat_score_L1</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">per_cat_score_L2</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mean_stk</span>
+        <span class="n">push</span><span class="o">!(</span>per_cat_score_L1,Flux.Losses.mae<span class="o">(</span>xtest<span class="o">[</span>:,:,i<span class="o">]</span>,m<span class="o">))</span>
+        <span class="n">push</span><span class="o">!(</span>per_cat_score_L2,sqrt<span class="o">(</span>Flux.Losses.mse<span class="o">(</span>xtest<span class="o">[</span>:,:,i<span class="o">]</span>,m<span class="o">)))</span>
+    <span class="n">end</span>
+    
+    <span class="n">per_image_score_L1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">argmin</span><span class="p">(</span><span class="n">per_cat_score_L1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+    <span class="n">per_image_score_L2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">argmin</span><span class="p">(</span><span class="n">per_cat_score_L2</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+<span class="n">end</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can now display the class-wise accuracy, both L1 and L2 metric, for complete test set.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="o">=</span><span class="mi">0</span><span class="p">:</span><span class="mi">9</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">per_image_score_L1</span><span class="p">[</span><span class="n">ytest</span><span class="o">.==</span><span class="n">i</span><span class="p">]</span><span class="o">.==</span><span class="n">i</span><span class="p">)</span><span class="o">/</span><span class="n">count_per_class_test_data</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">per_image_score_L2</span><span class="p">[</span><span class="n">ytest</span><span class="o">.==</span><span class="n">i</span><span class="p">]</span><span class="o">.==</span><span class="n">i</span><span class="p">)</span><span class="o">/</span><span class="n">count_per_class_test_data</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">println</span><span class="p">(</span><span class="s2">" Test Accuracy for digit $(cats[i+1]) : L1("</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">a</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="s2">"%),  L2("</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">b</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="s2">"%)"</span><span class="p">)</span>
+<span class="n">end</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre> Test Accuracy for digit 0 : L1(81.53%),  L2(89.59%)
+ Test Accuracy for digit 1 : L1(99.82%),  L2(96.21%)
+ Test Accuracy for digit 2 : L1(42.34%),  L2(75.68%)
+ Test Accuracy for digit 3 : L1(60.89%),  L2(80.59%)
+ Test Accuracy for digit 4 : L1(66.8%),  L2(82.59%)
+ Test Accuracy for digit 5 : L1(32.62%),  L2(68.61%)
+ Test Accuracy for digit 6 : L1(78.71%),  L2(86.33%)
+ Test Accuracy for digit 7 : L1(76.46%),  L2(83.27%)
+ Test Accuracy for digit 8 : L1(44.25%),  L2(73.72%)
+ Test Accuracy for digit 9 : L1(77.6%),  L2(80.67%)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>A simple mean-per-class model seems to be performing very well for digits. To see errors in predictions, we can build a <strong>Confusion Matrix</strong>. The idea of a confusion matrix is to show true positive and false negative for each class. The rows (y-axis) usually shows predictions and columns (x-axis) shows the actual class.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">function</span> <span class="n">confusionMatrix</span><span class="p">(</span><span class="n">ŷ</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">cm</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">Int16</span><span class="p">,</span> <span class="n">length</span><span class="p">(</span><span class="n">cats</span><span class="p">),</span> <span class="n">length</span><span class="p">(</span><span class="n">cats</span><span class="p">))</span>
+    <span class="n">zbi</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># Since its 1 based indexing but our cats are starting from zero so add 1</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ŷ</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">cm</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="n">zbi</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="n">zbi</span><span class="p">]</span> <span class="o">=</span> <span class="n">cm</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="n">zbi</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="n">zbi</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> 
+    <span class="n">end</span>
+    <span class="k">return</span> <span class="n">cm</span>
+<span class="n">end</span>
+
+<span class="n">confusionMatrix</span><span class="p">(</span><span class="n">per_image_score_L2</span><span class="p">,</span> <span class="n">ytest</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>10×10 Array{Int16,2}:
+ 878     0    7    2    2   58   25    1    7    0
+   0  1092   10    3    0    7    3    0   20    0
+  19    71  781   33   31    3   23   18   50    3
+   4    24   25  814    1   49    8   15   58   12
+   1    22    2    0  811    3   16    1   10  116
+  11    63    2  118   21  612   27   10   13   15
+  18    27   22    0   31   32  827    0    1    0
+   2    59   22    1   20    2    0  856   13   53
+  14    39   11   83   12   36   13   10  718   38
+  15    22    7   10   83   12    1   27   18  814</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here we can see that <code>row 1</code> shows 878 true positives (predicted class <code>0</code> is the same as actual class <code>0</code>) and 102 false negatives (predicted class is different than actual class <code>0</code>)</p>
+<p>This finishes our tutorial on applying KNN (K=1) to MNIST dataset in Julia. In the next tutorial, we will apply deep learning to see if it significantly improves per-class accuracy</p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="dr-omer/blog"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/blog/machinelearning/julia/mnist/knn/2020/10/08/MNIST-Julia-KNN.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/blog/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/blog/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/blog/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Powered by fastpages.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/dr-omer.github.io" title="dr-omer.github.io"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/SyedOmerGilani" title="SyedOmerGilani"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
